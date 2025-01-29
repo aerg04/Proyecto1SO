@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
-package com.mycompany.proyecto1;
+package main;
 
 /**
  *
@@ -11,6 +11,7 @@ package com.mycompany.proyecto1;
 public class Proyecto1 {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        W1 w1 = new W1();
+        w1.setVisible(true);
     }
 }
