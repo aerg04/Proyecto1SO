@@ -18,6 +18,10 @@ public class W1 extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
+    
+    public int getSelectAlgorithm(){
+        return this.selectDispatcher.getSelectedIndex();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,7 +50,8 @@ public class W1 extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        selectDispatcher.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        selectDispatcher.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FSFC", "Round Robin", "SPN", "SRT", "HRR" }));
+        selectDispatcher.setToolTipText("");
         selectDispatcher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectDispatcherActionPerformed(evt);
@@ -101,7 +106,7 @@ public class W1 extends javax.swing.JFrame {
         createProcess.setText("Create Process");
         jPanel1.add(createProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 763, 416));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 763, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -116,10 +121,13 @@ public class W1 extends javax.swing.JFrame {
 
     private void selectDispatcherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDispatcherActionPerformed
         // TODO add your handling code here:
+        this.selectDispatcher.getSelectedIndex();
+        //this.selectDispatcher.getEditor()
     }//GEN-LAST:event_selectDispatcherActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
