@@ -22,6 +22,18 @@ public class W1 extends javax.swing.JFrame {
     public int getSelectAlgorithm(){
         return this.selectDispatcher.getSelectedIndex();
     }
+    public void updateReady(String text){
+        this.jTextArea1.setText(text);
+    } 
+    public void updateBlock(String text){
+        this.jTextArea2.setText(text);
+    } 
+    public void updateProcess(String text){
+        this.jTextArea3.setText(text);
+    }
+    public int getTime(){
+        return this.timeSlider.getValue();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,10 +52,17 @@ public class W1 extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        readyList = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
         jButton4 = new javax.swing.JButton();
         createProcess = new javax.swing.JButton();
+        timeSlider = new javax.swing.JSlider();
+        instructionTime = new javax.swing.JLabel();
+        blockedList = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -57,7 +76,7 @@ public class W1 extends javax.swing.JFrame {
                 selectDispatcherActionPerformed(evt);
             }
         });
-        jPanel1.add(selectDispatcher, new org.netbeans.lib.awtextra.AbsoluteConstraints(253, 372, 270, -1));
+        jPanel1.add(selectDispatcher, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 360, 270, -1));
 
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,18 +88,18 @@ public class W1 extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("CPU1");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 22, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("CPU2");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(191, 22, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, -1, -1));
 
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 52, 106, 105));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 106, 105));
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("CPU3");
@@ -92,8 +111,22 @@ public class W1 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 199, 106, 105));
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 130, 250));
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, 130, 250));
+
+        readyList.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        readyList.setViewportView(jTextArea2);
+
+        jPanel1.add(readyList, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, 130, 250));
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jScrollPane2.setViewportView(jTextArea3);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 130, 250));
 
         jButton4.setText("Play");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -101,12 +134,40 @@ public class W1 extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 370, 70, -1));
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 450, 70, -1));
 
         createProcess.setText("Create Process");
-        jPanel1.add(createProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, -1, -1));
+        jPanel1.add(createProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 450, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 763, 440));
+        timeSlider.setMaximum(10000);
+        timeSlider.setValue(5000);
+        timeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                timeSliderStateChanged(evt);
+            }
+        });
+        jPanel1.add(timeSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 360, -1, -1));
+
+        instructionTime.setText("5000");
+        jPanel1.add(instructionTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 380, -1, -1));
+
+        blockedList.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        blockedList.setViewportView(jTextArea1);
+
+        jPanel1.add(blockedList, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, 130, 250));
+
+        jButton5.setText("Show Usage");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(454, 450, 100, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 490));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -121,7 +182,7 @@ public class W1 extends javax.swing.JFrame {
 
     private void selectDispatcherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDispatcherActionPerformed
         // TODO add your handling code here:
-        this.selectDispatcher.getSelectedIndex();
+        //this.selectDispatcher.getSelectedIndex();
         //this.selectDispatcher.getEditor()
     }//GEN-LAST:event_selectDispatcherActionPerformed
 
@@ -133,6 +194,15 @@ public class W1 extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void timeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSliderStateChanged
+        // TODO add your handling code here:
+        this.instructionTime.setText(String.valueOf(this.timeSlider.getValue()));
+    }//GEN-LAST:event_timeSliderStateChanged
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,17 +240,24 @@ public class W1 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane blockedList;
     private javax.swing.JButton createProcess;
+    private javax.swing.JLabel instructionTime;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JScrollPane readyList;
     private javax.swing.JComboBox<String> selectDispatcher;
+    private javax.swing.JSlider timeSlider;
     // End of variables declaration//GEN-END:variables
 }

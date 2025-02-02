@@ -31,6 +31,7 @@ public class List <T>{
     public boolean isEmpty(){
         return head!=null;
     }
+    
     public void delete(NodoList pDelete){
 //        System.out.println(this.isEmpty());
          if(this.isEmpty()){
@@ -117,6 +118,18 @@ public class List <T>{
         }
         output += "]";
         return output;
+    }
+    
+    public NodoList getNodoById(int k){
+        NodoList pAux = head;
+        if(k>=this.size){
+            return null;
+        }else{
+            for(int i= 0;i<=k-1; i++){
+                pAux = pAux.getpNext();
+            }
+            return pAux;
+        }
     }
 //    public void appendFirst(NodoList pNew){
 ////        NodoList pNew = new NodoList (x);
