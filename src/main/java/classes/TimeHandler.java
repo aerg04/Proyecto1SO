@@ -3,20 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package classes;
-
+import main.*;
 /**
  *
  * @author DELL
  */
 public class TimeHandler {
     private int instructionTime;
-
-    public TimeHandler(int instructionTime) {
-        this.instructionTime = instructionTime;
+    private W1 window;
+    public TimeHandler(W1 window) {
+        this.instructionTime = 5000;
+        this.window = window;
     }
 
     public int getInstructionTime() {
-        return instructionTime;
+        return window.getTime();
     }
 
     public void setInstructionTime(int instructionTime) {
