@@ -3,30 +3,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package classes;
-
+import primitivas.*;
 /**
  *
  * @author DELL
  */
-public class PCB {
+public class ProcessImage {
+    private List instructions; //lista para saber cuales generan excepciones
+    private String type;
     private int id;
     private String status;
     private String name;
     private int programCounter;
     private int memoryAddressRegister;
-
-    public PCB(int id, String status, String name, int programCounter, int memoryAddressRegister) {
-        this.id = id;
-        this.status = status;
-        this.name = name;
-        this.programCounter = programCounter;
-        this.memoryAddressRegister = memoryAddressRegister;
-    }
+    private int duration;
+    private int quantum;
 
     public int getId() {
         return id;
     }
 
+    public ProcessImage(List instructions, String type, int id, String status, String name, int programCounter, int memoryAddressRegister, int duration) {
+        this.instructions = instructions;
+        this.type = type;
+        this.id = id;
+        this.status = status;
+        this.name = name;
+        this.programCounter = programCounter;
+        this.memoryAddressRegister = memoryAddressRegister;
+        this.duration = duration;
+    }
+    
     public void setId(int id) {
         this.id = id;
     }
@@ -63,4 +70,29 @@ public class PCB {
         this.memoryAddressRegister = memoryAddressRegister;
     }
     
+    
+    public List getInstructions() {
+        return instructions;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getQuantum() {
+        return quantum;
+    }
+
+    public void setQuantum(int quantum) {
+        this.quantum = quantum;
+    }
+    
+    
+    public void setInstructions(List instructions) {
+        this.instructions = instructions;
+    }  
 }

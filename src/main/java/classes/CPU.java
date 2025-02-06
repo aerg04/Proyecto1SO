@@ -19,7 +19,7 @@ public class CPU extends Thread {
     private int programCounter;
     private List interruptionsList;
     private Dispatcher dispatcher;
-    private Process currentProcess;
+    private ProcessImage currentProcess;
     private int id;
     private Semaphore mutexExceptions;
     private Semaphore mutexCPUs;
@@ -39,34 +39,35 @@ public class CPU extends Thread {
                     this.useDispatcher("ready");
                     this.getProcess();
                     
-                }
-
-                //checkear si el proceso termino
-                if(this.currentProcess.getDuration() < this.memoryAddressRegister){
-                    //aqui hay que cambiar la interfas para mostrar que se esta ejecutando
-                    //una componente del sistema operativo
-                    this.useDispatcher("exit");
-                    this.getProcess();
-                }
-                
-                //aqui hay que cambiar la interfaz para mostrar al proceso
-                
-                //se ejecuta la intruccion del proceso actual
-                try {
-                    sleep(timeHandler.getInstructionTime());
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                //checkear si hay que crear interrupción
-                if(this.isInterruption(memoryAddressRegister)){
-                    this.useDispatcher("blocked");
-                   //elegir un nuevo proceso??
                 }else{
-                    // instrucciones inertes
-                    //esto es si el proceso continua su ejecución
-                    quantum--;
-                    programCounter++;
-                    this.memoryAddressRegister++;
+                    if(this.currentProcess.getDuration() < this.memoryAddressRegister){
+                        //aqui hay que cambiar la interfas para mostrar que se esta ejecutando
+                        //una componente del sistema operativo
+                        this.useDispatcher("exit");
+                        this.getProcess();
+                    }else{
+                        //checkear si el proceso termino
+
+                        //aqui hay que cambiar la interfaz para mostrar al proceso
+
+                        //se ejecuta la intruccion del proceso actual
+                        try {
+                            sleep(timeHandler.getInstructionTime());
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        //checkear si hay que crear interrupción
+                        if(this.isInterruption(memoryAddressRegister)){
+                            this.useDispatcher("blocked");
+                            this.getProcess();
+                        }else{
+                            // instrucciones inertes
+                            //esto es si el proceso continua su ejecución
+                            quantum--;
+                            programCounter++;
+                            this.memoryAddressRegister++;
+                        }    
+                    }
                 }
             }
         }
@@ -75,7 +76,7 @@ public class CPU extends Thread {
         for (int i = 0; i < this.currentProcess.getInstructions().getSize()-1; i++) {
             if(i%2==0 && this.currentProcess.getInstructions().getNodoById(i).getValue().equals(mar)){
                 int j = (int) this.currentProcess.getInstructions().getNodoById(i+1).getValue();
-                Exception exception = new Exception(id,j,this.timeHandler,this.currentProcess.getpCB().getId(),this.interruptionsList,this.mutexExceptions);
+                Exception exception = new Exception(id,j,this.timeHandler,this.currentProcess.getId(),this.interruptionsList,this.mutexExceptions);
                 exception.start();
                 return true;
             }
@@ -93,7 +94,12 @@ public class CPU extends Thread {
         } catch (InterruptedException ex) {
             Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
         }
-       this.dispatcher.updatePCB(currentProcess, programCounter, memoryAddressRegister,state);
+        //es posible que salva sin ser ejecutado
+        if(quantum != currentProcess.getQuantum()){
+            this.dispatcher.updatePCB(currentProcess, programCounter, memoryAddressRegister,state);
+        }else{
+            this.dispatcher.updatePCB(currentProcess,state);
+        }
        mutexCPUs.release();
     }
     
@@ -106,5 +112,17 @@ public class CPU extends Thread {
             }
             this.currentProcess = this.dispatcher.getProcess();
             mutexCPUs.release();
+            
+            quantum = currentProcess.getQuantum();
+            programCounter = currentProcess.getProgramCounter()+1;
+            memoryAddressRegister = currentProcess.getProgramCounter();
+
+            for (int i = 1; i < 4; i++) {
+            try {
+                sleep(timeHandler.getInstructionTime());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
         }
 }

@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package main;
-
+import primitivas.*;
+import classes.*;
 /**
  *
  * @author DELL
@@ -13,10 +14,15 @@ public class W1 extends javax.swing.JFrame {
     /**
      * Creates new form W1
      */
+    public List newList; 
     public W1() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+    }
+    public synchronized void createNewProcess(List list,String name,String type,int duration ){
+        ProcessImage newProcess = new ProcessImage(list,type,1,"ready",name,1,0,duration);
+        newList.appendLast(newProcess);
     }
     
     public int getSelectAlgorithm(){

@@ -19,8 +19,8 @@ public class Dispatcher {
     private List exitList;
     private W1 window;
     
-    public Process getProcess(){
-        Process output = null;
+    public ProcessImage getProcess(){
+        ProcessImage output = null;
         if(!this.readyList.isEmpty()){
         window.getSelectAlgorithm();
         switch(window.getSelectAlgorithm()){
@@ -46,12 +46,12 @@ public class Dispatcher {
          //aqui hay que actulizar la interfaz
         return output;    
     }
-    private Process FCFS(){
+    private ProcessImage FCFS(){
         NodoList pAux = this.readyList.getHead();
         this.readyList.delete(pAux);
        
-        Process output = (Process) pAux.getValue();
-        output.getpCB().setStatus("running");
+        ProcessImage output = (ProcessImage) pAux.getValue();
+        output.setStatus("running");
         //asi nunca se saldra hasta que haya interrupción
         output.setQuantum(-1);
         return output;
@@ -63,12 +63,12 @@ public class Dispatcher {
             //pAux = pAux.getpNext();
         //}
     }
-    public Process RoundRobin(){
+    public ProcessImage RoundRobin(){
         NodoList pAux = this.readyList.getHead();
         this.readyList.delete(pAux);
         //aqui hay que actulizar la interfaz
-        Process output = (Process) pAux.getValue();
-        output.getpCB().setStatus("running");
+        ProcessImage output = (ProcessImage) pAux.getValue();
+        output.setStatus("running");
         //asi nunca se saldra hasta que haya interrupción
         output.setQuantum(5);
         return output;
@@ -77,11 +77,22 @@ public class Dispatcher {
         
     }
     
-    public void updatePCB(Process process,int programCounter,int memoryAddressRegister,String state){
-        PCB pcb = process.getpCB();
-        pcb.setStatus(state);
-        pcb.setProgramCounter(programCounter);
-        pcb.setMemoryAddressRegister(memoryAddressRegister);
+    public void updatePCB(ProcessImage process,int programCounter,int memoryAddressRegister,String state){
+        
+        process.setStatus(state);
+        process.setProgramCounter(programCounter);
+        process.setMemoryAddressRegister(memoryAddressRegister);
+        if(state=="bloked"){
+            this.blockedList.appendLast(process);   
+        }else if(state=="ready"){
+            this.readyList.appendLast(process);
+        }else{
+            this.exitList.appendLast(process);
+        }
+    }
+    public void updatePCB(ProcessImage process,String state){
+        
+        process.setStatus(state);
         if(state=="bloked"){
             this.blockedList.appendLast(process);   
         }else if(state=="ready"){
