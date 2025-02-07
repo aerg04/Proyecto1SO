@@ -18,6 +18,7 @@ public class ProcessImage {
     private int memoryAddressRegister;
     private int duration;
     private int quantum;
+    private int waitingTime;
 
     public int getId() {
         return id;
@@ -60,6 +61,22 @@ public class ProcessImage {
 
     public void setProgramCounter(int programCounter) {
         this.programCounter = programCounter;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getWaitingTime() {
+        return waitingTime;
+    }
+
+    public void setWaitingTime(int waitingTime) {
+        this.waitingTime = waitingTime;
     }
 
     public int getMemoryAddressRegister() {

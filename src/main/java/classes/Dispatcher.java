@@ -30,15 +30,19 @@ public class Dispatcher {
                 }
             case 2 -> {
                 //round robin
+                 output = this.RoundRobin();
                 }
             case 3 -> {
+                output = this.SPN();
                 // SPN
                 }
             case 4 -> {
+                 output = this.SRT();
                 //SRT
                 }
             case 5 -> {
                 //HRR
+                 output = this.HRR();
                 }
             
         }
@@ -54,6 +58,7 @@ public class Dispatcher {
         output.setStatus("running");
         //asi nunca se saldra hasta que haya interrupción
         output.setQuantum(-1);
+        output.setWaitingTime(0);
         return output;
 
         //while(pAux!=null){
@@ -69,14 +74,72 @@ public class Dispatcher {
         //aqui hay que actulizar la interfaz
         ProcessImage output = (ProcessImage) pAux.getValue();
         output.setStatus("running");
-        //asi nunca se saldra hasta que haya interrupción
         output.setQuantum(5);
+        output.setWaitingTime(0);
         return output;
     }
     public void uptadeInterfaces(){
         
     }
+    private ProcessImage SPN(){
+        // Implement SPN algorithm
+        NodoList shortestJob = this.readyList.getHead();
+        NodoList current = this.readyList.getHead();
+        while (current != null) {
+            if (((ProcessImage) current.getValue()).getDuration() < ((ProcessImage) shortestJob.getValue()).getDuration()) {
+                shortestJob = current;
+            }
+            current = current.getpNext();
+        }
+        this.readyList.delete(shortestJob);
+        ProcessImage output = (ProcessImage) shortestJob.getValue();
+        output.setStatus("running");
+        output.setQuantum(-1);
+        output.setWaitingTime(0);
+        return output;
+    }
+    private ProcessImage SRT(){
+        // Implement SPN algorithm
+        //es expulsiva
+        NodoList shortestJob = this.readyList.getHead();
+        NodoList current = this.readyList.getHead();
+        while (current != null) {
+            if (((ProcessImage) current.getValue()).getDuration() - ((ProcessImage) current.getValue()).getMemoryAddressRegister() < 
+                    ((ProcessImage) shortestJob.getValue()).getDuration()- ((ProcessImage) shortestJob.getValue()).getMemoryAddressRegister() ) {
+                shortestJob = current;
+            }
+            current = current.getpNext();
+        }
+        this.readyList.delete(shortestJob);
+        ProcessImage output = (ProcessImage) shortestJob.getValue();
+        output.setStatus("running");
+        output.setQuantum(-1);
+        output.setWaitingTime(0);
+        return output;
+    }
     
+    private ProcessImage HRR(){
+        // Implement HRR algorithm
+        NodoList bestJob = this.readyList.getHead();
+        NodoList current = this.readyList.getHead();
+        double highestRatio = 0;
+        while (current != null) {
+            ProcessImage proc = (ProcessImage) current.getValue();
+            double responseRatio = (proc.getWaitingTime() + proc.getDuration()) / (double) proc.getDuration();
+            if (responseRatio > highestRatio) {
+                highestRatio = responseRatio;
+                bestJob = current;
+            }
+            current = current.getpNext();
+        }
+        this.readyList.delete(bestJob);
+        ProcessImage output = (ProcessImage) bestJob.getValue();
+        output.setStatus("running");
+        output.setQuantum(-1);
+        output.setWaitingTime(0);
+        return output;
+    }
+
     public void updatePCB(ProcessImage process,int programCounter,int memoryAddressRegister,String state){
         
         process.setStatus(state);
@@ -99,6 +162,15 @@ public class Dispatcher {
             this.readyList.appendLast(process);
         }else{
             this.exitList.appendLast(process);
+        }
+    }
+    
+    public void updateWaitingTime(){
+        NodoList pAux = this.readyList.getHead();
+        while(pAux!=null){
+            int waitingTime = ((ProcessImage) pAux.getValue()).getWaitingTime();
+            ((ProcessImage) pAux.getValue()).setWaitingTime(waitingTime++);
+            pAux = pAux.getpNext();
         }
     }
 }
