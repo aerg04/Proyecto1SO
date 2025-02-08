@@ -15,10 +15,12 @@ import java.util.logging.Logger;
  */
 public class Clock extends Thread {
     private Semaphore mutex;
+    private Semaphore onPlay;
     private TimeHandler timeHandler;
     private Dispatcher dispatcher;
-    public Clock(Semaphore mutex) {
+    public Clock(Semaphore mutex,Semaphore onPlay) {
         this.mutex = mutex;
+        this.onPlay = onPlay;
     }
     
     /**
@@ -26,6 +28,11 @@ public class Clock extends Thread {
      */
     @Override
     public void run() {
+        try {
+            onPlay.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Clock.class.getName()).log(Level.SEVERE, null, ex);
+        }
         while(true){
             try {
                 mutex.acquire();

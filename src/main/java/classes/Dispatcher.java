@@ -18,6 +18,13 @@ public class Dispatcher {
     private List blockedList;
     private List exitList;
     private W1 window;
+
+    public Dispatcher(List readyList, List blockedList, List exitList, W1 window) {
+        this.readyList = readyList;
+        this.blockedList = blockedList;
+        this.exitList = exitList;
+        this.window = window;
+    }
     
     public ProcessImage getProcess(){
         ProcessImage output = null;
@@ -170,6 +177,17 @@ public class Dispatcher {
         while(pAux!=null){
             int waitingTime = ((ProcessImage) pAux.getValue()).getWaitingTime();
             ((ProcessImage) pAux.getValue()).setWaitingTime(waitingTime++);
+            pAux = pAux.getpNext();
+        }
+    }
+    
+    public void updateBlockToReady(int id){
+        NodoList pAux = this.blockedList.getHead();
+        while(pAux!=null){
+            if(id== ((ProcessImage)pAux.getValue()).getId()){
+                blockedList.delete(pAux);
+                readyList.appendLast(pAux);                
+            }
             pAux = pAux.getpNext();
         }
     }

@@ -22,16 +22,38 @@ public class CPU extends Thread {
     private ProcessImage currentProcess;
     private int id;
     private Semaphore mutexExceptions;
+    private Semaphore onPlay;
     private Semaphore mutexCPUs;
+
+    public CPU(TimeHandler timeHandler, Dispatcher dispatcher, int id, Semaphore mutexCPUs,Semaphore onPlay) {
+        this.timeHandler = timeHandler;
+        this.dispatcher = dispatcher;
+        this.id = id;
+        this.mutexCPUs = mutexCPUs;
+        this.mutexExceptions = new Semaphore(1);
+        this.interruptionsList = new List();
+        this.onPlay = onPlay;
+    }
+    
+    
     /**
      * Hola
      */
     @Override
     public void run(){
+        try {
+            onPlay.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // para arrancar
+        this.getProcess();
         while(true){
             //checkear interrupciones
             if(!this.interruptionsList.isEmpty()){
-                
+                Exception exception = (Exception) interruptionsList.getHead().getValue();
+                interruptionsList.delete(interruptionsList.getHead());
+                this.interruptHandler(exception);
             }else{
                 //checkear que el pocesso aun tiene tiempo de ejcución
                 //revisar si hay un proceos de mayor prioridad para ploitica expulsivas
@@ -84,8 +106,16 @@ public class CPU extends Thread {
         return false;
     }
     
-    private void interruptHandler(){
+    private void interruptHandler(Exception exception){
         
+        try {
+            //Aqui va un semaforo
+                mutexCPUs.acquire();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.dispatcher.updateBlockToReady(exception.getProcessId());
+            mutexCPUs.release();
     }
     private void useDispatcher(String state){
         try {
