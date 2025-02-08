@@ -34,6 +34,19 @@ public class W1 extends javax.swing.JFrame {
         ProcessImage newProcess = new ProcessImage(list,type,1,"ready",name,1,0,duration);
         newList.appendLast(newProcess);
     }
+    public void updateCPUs(String input, int id){
+        switch(id){
+            case 1 -> {
+                this.cpu1TextArea.setText(input);
+                }
+            case 2 -> {
+                this.cpu2TextArea.setText(input);
+                }
+            case 3 -> {
+                this.cpu3TextArea.setText(input);
+                }           
+        }
+    }
     
     public int getSelectAlgorithm(){
         return this.selectDispatcher1.getSelectedIndex();

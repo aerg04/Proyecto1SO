@@ -31,9 +31,9 @@ public class Proyecto1 {
         Dispatcher dispatcher = new Dispatcher(readyList,blockedList,exitList,w1);
         
         // para los cpus
-        CPU cpu1 = new CPU(timeHandler,dispatcher,1,mutexDispatcher,onPlay);
-        CPU cpu2 = new CPU(timeHandler,dispatcher,2,mutexDispatcher, onPlay);
-        CPU cpu3 = new CPU(timeHandler,dispatcher,3,mutexDispatcher, onPlay);
+        CPU cpu1 = new CPU(timeHandler,dispatcher,1,mutexDispatcher,onPlay,w1);
+        CPU cpu2 = new CPU(timeHandler,dispatcher,2,mutexDispatcher, onPlay,w1);
+        CPU cpu3 = new CPU(timeHandler,dispatcher,3,mutexDispatcher, onPlay,w1);
         clock.start();
         cpu1.start();
         cpu3.start();

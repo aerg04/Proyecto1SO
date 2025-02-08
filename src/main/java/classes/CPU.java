@@ -8,12 +8,14 @@ import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import primitivas.*;
+import main.*;
 /**
  *
  * @author DELL
  */
 public class CPU extends Thread {
     private TimeHandler timeHandler;
+    private W1 window;
     private int quantum;
     private int memoryAddressRegister;
     private int programCounter;
@@ -25,7 +27,7 @@ public class CPU extends Thread {
     private Semaphore onPlay;
     private Semaphore mutexCPUs;
 
-    public CPU(TimeHandler timeHandler, Dispatcher dispatcher, int id, Semaphore mutexCPUs,Semaphore onPlay) {
+    public CPU(TimeHandler timeHandler, Dispatcher dispatcher, int id, Semaphore mutexCPUs,Semaphore onPlay, W1 window) {
         this.timeHandler = timeHandler;
         this.dispatcher = dispatcher;
         this.id = id;
@@ -33,6 +35,7 @@ public class CPU extends Thread {
         this.mutexExceptions = new Semaphore(1);
         this.interruptionsList = new List();
         this.onPlay = onPlay;
+        this.window = window;
     }
     
     
@@ -88,6 +91,7 @@ public class CPU extends Thread {
                             quantum--;
                             programCounter++;
                             this.memoryAddressRegister++;
+                            this.updateInterfaceProcess();
                         }    
                     }
                 }
@@ -134,25 +138,35 @@ public class CPU extends Thread {
     }
     
     private void getProcess(){
+        this.window.updateCPUs("Dispatcher(OS)", id);
+        for (int i = 1; i < 4; i++) {
+        try {
+            sleep(timeHandler.getInstructionTime());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
         try {
             //Aqui va un semaforo
                 mutexCPUs.acquire();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            this.currentProcess = this.dispatcher.getProcess();
-            mutexCPUs.release();
-            
-            quantum = currentProcess.getQuantum();
-            programCounter = currentProcess.getProgramCounter()+1;
-            memoryAddressRegister = currentProcess.getProgramCounter();
-
-            for (int i = 1; i < 4; i++) {
-            try {
-                sleep(timeHandler.getInstructionTime());
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.currentProcess = this.dispatcher.getProcess();
+        mutexCPUs.release();
+
+        quantum = currentProcess.getQuantum();
+        programCounter = currentProcess.getProgramCounter()+1;
+        memoryAddressRegister = currentProcess.getProgramCounter();
+        this.updateInterfaceProcess();
+
+        }
+    private void updateInterfaceProcess(){
+        String display = "ID: " + currentProcess.getId() + 
+                "\n Status: " + currentProcess.getStatus()+ 
+                "\n Nombre: " + currentProcess.getName() +
+                "\n PC: " + programCounter + 
+                "\n MAR: " + this.memoryAddressRegister ;
+        this.window.updateCPUs(display, id);
+    }
 }
