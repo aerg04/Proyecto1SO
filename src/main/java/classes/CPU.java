@@ -60,7 +60,7 @@ public class CPU extends Thread {
             }else{
                 //checkear que el pocesso aun tiene tiempo de ejcución
                 //revisar si hay un proceos de mayor prioridad para ploitica expulsivas
-                if(this.quantum==0 && true){
+                if(this.quantum==0 || this.checkSRT() ){
                     this.useDispatcher("ready");
                     this.getProcess();
                     
@@ -121,6 +121,7 @@ public class CPU extends Thread {
             this.dispatcher.updateBlockToReady(exception.getProcessId());
             mutexCPUs.release();
     }
+    
     private void useDispatcher(String state){
         try {
             //aqui hay que actuliazar el pcb
@@ -136,7 +137,17 @@ public class CPU extends Thread {
         }
        mutexCPUs.release();
     }
-    
+    private boolean checkSRT(){
+        try {
+            //Aqui va un semaforo
+                mutexCPUs.acquire();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            boolean output = this.dispatcher.ifSRT(currentProcess);
+            mutexCPUs.release();
+            return output;
+    }
     private void getProcess(){
         this.window.updateCPUs("Dispatcher(OS)", id);
         for (int i = 1; i < 4; i++) {
@@ -161,6 +172,7 @@ public class CPU extends Thread {
         this.updateInterfaceProcess();
 
         }
+    
     private void updateInterfaceProcess(){
         String display = "ID: " + currentProcess.getId() + 
                 "\n Status: " + currentProcess.getStatus()+ 

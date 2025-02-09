@@ -55,6 +55,8 @@ public class Dispatcher {
         }
         }
          //aqui hay que actulizar la interfaz
+        this.updateReadyList();
+        this.updateProcessList();
         return output;    
     }
     private ProcessImage FCFS(){
@@ -65,7 +67,7 @@ public class Dispatcher {
         output.setStatus("running");
         //asi nunca se saldra hasta que haya interrupción
         output.setQuantum(-1);
-        output.setWaitingTime(0);
+        //output.setWaitingTime(0);
         return output;
 
         //while(pAux!=null){
@@ -82,12 +84,10 @@ public class Dispatcher {
         ProcessImage output = (ProcessImage) pAux.getValue();
         output.setStatus("running");
         output.setQuantum(5);
-        output.setWaitingTime(0);
+        //output.setWaitingTime(0);
         return output;
     }
-    public void uptadeInterfaces(){
-        
-    }
+
     private ProcessImage SPN(){
         // Implement SPN algorithm
         NodoList shortestJob = this.readyList.getHead();
@@ -102,7 +102,7 @@ public class Dispatcher {
         ProcessImage output = (ProcessImage) shortestJob.getValue();
         output.setStatus("running");
         output.setQuantum(-1);
-        output.setWaitingTime(0);
+        //output.setWaitingTime(0);
         return output;
     }
     private ProcessImage SRT(){
@@ -121,7 +121,7 @@ public class Dispatcher {
         ProcessImage output = (ProcessImage) shortestJob.getValue();
         output.setStatus("running");
         output.setQuantum(-1);
-        output.setWaitingTime(0);
+        //output.setWaitingTime(0);
         return output;
     }
     
@@ -143,15 +143,29 @@ public class Dispatcher {
         ProcessImage output = (ProcessImage) bestJob.getValue();
         output.setStatus("running");
         output.setQuantum(-1);
-        output.setWaitingTime(0);
+        //output.setWaitingTime(0);
         return output;
     }
+    
+    public boolean ifSRT(ProcessImage process){
+        if(window.getSelectAlgorithm() == 4){
+        NodoList current = this.readyList.getHead();
+        while (current != null) {
+            if (((ProcessImage) current.getValue()).getDuration() - ((ProcessImage) current.getValue()).getMemoryAddressRegister() < 
+                    process.getDuration()- process.getMemoryAddressRegister()) {
+                return true;
+            }
+            current = current.getpNext();
+        }    
+        }
+        return false;
+    }
 
-    public void updatePCB(ProcessImage process,int programCounter,int memoryAddressRegister,String state){
-        
+    public void updatePCB(ProcessImage process,int programCounter,int memoryAddressRegister,String state){ 
         process.setStatus(state);
         process.setProgramCounter(programCounter);
         process.setMemoryAddressRegister(memoryAddressRegister);
+        process.setWaitingTime(0);
         if(state=="bloked"){
             this.blockedList.appendLast(process);   
         }else if(state=="ready"){
@@ -159,10 +173,13 @@ public class Dispatcher {
         }else{
             this.exitList.appendLast(process);
         }
+        this.updateReadyList();
+        this.updateBlockedList();
+        this.updateProcessList();
     }
     public void updatePCB(ProcessImage process,String state){
-        
         process.setStatus(state);
+        process.setWaitingTime(0);
         if(state=="bloked"){
             this.blockedList.appendLast(process);   
         }else if(state=="ready"){
@@ -170,6 +187,9 @@ public class Dispatcher {
         }else{
             this.exitList.appendLast(process);
         }
+        this.updateReadyList();
+        this.updateBlockedList();
+        this.updateProcessList();
     }
     
     public void updateWaitingTime(){
@@ -190,5 +210,66 @@ public class Dispatcher {
             }
             pAux = pAux.getpNext();
         }
+        this.updateBlockedList();
+        this.updateProcessList();
+    }
+    
+    public void updateProcessList(){
+        NodoList pAux = readyList.getHead();
+        String display = "";
+        while(pAux!=null){
+            ProcessImage process=(ProcessImage) pAux.getValue();
+            display += process.getId() ;
+            pAux = pAux.getpNext();
+        }
+        pAux = blockedList.getHead();
+        while(pAux!=null){
+            ProcessImage process=(ProcessImage) pAux.getValue();
+            display += process.getId() ;
+            pAux = pAux.getpNext();
+        }
+        pAux = exitList.getHead();
+        while(pAux!=null){
+            ProcessImage process=(ProcessImage) pAux.getValue();
+            display += process.getId() ;
+            pAux = pAux.getpNext();
+        }
+        window.updateProcess(display);
+    }
+    
+    public void updateReadyList(){
+        NodoList pAux = readyList.getHead();
+        String display = "";
+        while(pAux!=null){
+            ProcessImage process=(ProcessImage) pAux.getValue();
+            
+            display += "\n ----------------------------------\n "
+                    + "ID: " + process.getId() +
+                      "\n Nombre: " + process.getName();
+            pAux = pAux.getpNext();
+        }
+        window.updateReady(display);
+    }
+    public void updateBlockedList(){
+        NodoList pAux = blockedList.getHead();
+        String display = "";
+        while(pAux!=null){
+            ProcessImage process=(ProcessImage) pAux.getValue();
+            
+            display += "\n ----------------------------------\n "
+                    + "ID: " + process.getId() +
+                      "\n Nombre: " + process.getName();
+            pAux = pAux.getpNext();
+        }
+        window.updateBlock(display);
+    }
+    
+    private String makeString(ProcessImage currentProcess){
+        String display = "\n ----------------------------------\n ID: " + currentProcess.getId() + 
+                "\n Status: " + currentProcess.getStatus()+ 
+                "\n Nombre: " + currentProcess.getName() +
+                "\n PC: " + currentProcess.getProgramCounter() + 
+                "\n MAR: " + currentProcess.getMemoryAddressRegister() ;
+        return display;
     }
 }

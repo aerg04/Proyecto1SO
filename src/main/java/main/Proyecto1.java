@@ -18,14 +18,14 @@ public class Proyecto1 {
         //para sincronizar los cpu al iniciar la simulación
         Semaphore onPlay = new Semaphore(0);
         Semaphore onPlayClock = new Semaphore(0);
+        List readyList = new List();
         
-        W1 w1 = new W1(onPlay,onPlayClock);
+        W1 w1 = new W1(onPlay,onPlayClock,readyList);
         w1.setVisible(true);
         Semaphore mutexDispatcher = new Semaphore(1);
         Clock clock = new Clock(mutexDispatcher, onPlayClock);
         TimeHandler timeHandler = new TimeHandler(w1);
         //colas del disptcher
-        List readyList = new List();
         List blockedList = new List();
         List exitList = new List();
         Dispatcher dispatcher = new Dispatcher(readyList,blockedList,exitList,w1);

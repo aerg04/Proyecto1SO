@@ -13,17 +13,18 @@ import java.util.concurrent.Semaphore;
 public class W1 extends javax.swing.JFrame {
     public Semaphore onPlay;
     public Semaphore onPlayClock;
-    public List newList;
+    public List readyList;
     /**
      * Creates new form W1
      */
     
-    public W1(Semaphore onPlay,Semaphore onPlay1) {
+    public W1(Semaphore onPlay,Semaphore onPlay1,List readyList) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.onPlay = onPlay;
         this.onPlayClock = onPlay1;
+        this.readyList = readyList;
     }
     public W1() {
         initComponents();
@@ -31,8 +32,8 @@ public class W1 extends javax.swing.JFrame {
         this.setResizable(false);
     }
     public synchronized void createNewProcess(List list,String name,String type,int duration ){
-        ProcessImage newProcess = new ProcessImage(list,type,1,"ready",name,1,0,duration);
-        newList.appendLast(newProcess);
+        ProcessImage newProcess = new ProcessImage(list,type,readyList.getSize(),"ready",name,1,0,duration);
+        readyList.appendLast(newProcess);
     }
     public void updateCPUs(String input, int id){
         switch(id){
@@ -305,6 +306,7 @@ public class W1 extends javax.swing.JFrame {
 
     private void showUsageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUsageButtonActionPerformed
         // TODO add your handling code here:
+        CreateProcess newProcess = new CreateProcess(this);
     }//GEN-LAST:event_showUsageButtonActionPerformed
 
     /**
