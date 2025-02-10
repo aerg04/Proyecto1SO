@@ -8,12 +8,14 @@ import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import primitivas.*;
+import main.*;
 /**
  *
  * @author DELL
  */
 public class CPU extends Thread {
     private TimeHandler timeHandler;
+    private W1 window;
     private int quantum;
     private int memoryAddressRegister;
     private int programCounter;
@@ -22,20 +24,43 @@ public class CPU extends Thread {
     private ProcessImage currentProcess;
     private int id;
     private Semaphore mutexExceptions;
+    private Semaphore onPlay;
     private Semaphore mutexCPUs;
+
+    public CPU(TimeHandler timeHandler, Dispatcher dispatcher, int id, Semaphore mutexCPUs,Semaphore onPlay, W1 window) {
+        this.timeHandler = timeHandler;
+        this.dispatcher = dispatcher;
+        this.id = id;
+        this.mutexCPUs = mutexCPUs;
+        this.mutexExceptions = new Semaphore(1);
+        this.interruptionsList = new List();
+        this.onPlay = onPlay;
+        this.window = window;
+    }
+    
+    
     /**
      * Hola
      */
     @Override
     public void run(){
+        try {
+            onPlay.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // para arrancar
+        this.getProcess();
         while(true){
             //checkear interrupciones
             if(!this.interruptionsList.isEmpty()){
-                
+                Exception exception = (Exception) interruptionsList.getHead().getValue();
+                interruptionsList.delete(interruptionsList.getHead());
+                this.interruptHandler(exception);
             }else{
                 //checkear que el pocesso aun tiene tiempo de ejcución
                 //revisar si hay un proceos de mayor prioridad para ploitica expulsivas
-                if(this.quantum==0 && true){
+                if(this.quantum==0 || this.checkSRT() ){
                     this.useDispatcher("ready");
                     this.getProcess();
                     
@@ -66,6 +91,7 @@ public class CPU extends Thread {
                             quantum--;
                             programCounter++;
                             this.memoryAddressRegister++;
+                            this.updateInterfaceProcess();
                         }    
                     }
                 }
@@ -84,9 +110,18 @@ public class CPU extends Thread {
         return false;
     }
     
-    private void interruptHandler(){
+    private void interruptHandler(Exception exception){
         
+        try {
+            //Aqui va un semaforo
+                mutexCPUs.acquire();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.dispatcher.updateBlockToReady(exception.getProcessId());
+            mutexCPUs.release();
     }
+    
     private void useDispatcher(String state){
         try {
             //aqui hay que actuliazar el pcb
@@ -102,27 +137,48 @@ public class CPU extends Thread {
         }
        mutexCPUs.release();
     }
-    
-    private void getProcess(){
+    private boolean checkSRT(){
         try {
             //Aqui va un semaforo
                 mutexCPUs.acquire();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.currentProcess = this.dispatcher.getProcess();
+            boolean output = this.dispatcher.ifSRT(currentProcess);
             mutexCPUs.release();
-            
-            quantum = currentProcess.getQuantum();
-            programCounter = currentProcess.getProgramCounter()+1;
-            memoryAddressRegister = currentProcess.getProgramCounter();
-
-            for (int i = 1; i < 4; i++) {
-            try {
-                sleep(timeHandler.getInstructionTime());
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            }
+            return output;
+    }
+    private void getProcess(){
+        this.window.updateCPUs("Dispatcher(OS)", id);
+        for (int i = 1; i < 4; i++) {
+        try {
+            sleep(timeHandler.getInstructionTime());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }
+        try {
+            //Aqui va un semaforo
+                mutexCPUs.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.currentProcess = this.dispatcher.getProcess();
+        mutexCPUs.release();
+
+        quantum = currentProcess.getQuantum();
+        programCounter = currentProcess.getProgramCounter()+1;
+        memoryAddressRegister = currentProcess.getProgramCounter();
+        this.updateInterfaceProcess();
+
+        }
+    
+    private void updateInterfaceProcess(){
+        String display = "ID: " + currentProcess.getId() + 
+                "\n Status: " + currentProcess.getStatus()+ 
+                "\n Nombre: " + currentProcess.getName() +
+                "\n PC: " + programCounter + 
+                "\n MAR: " + this.memoryAddressRegister ;
+        this.window.updateCPUs(display, id);
+    }
 }

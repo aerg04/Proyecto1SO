@@ -31,6 +31,54 @@ public class Exception extends Thread {
         this.interruptionList = interruptionList;
         this.mutex = mutex;
     }
+
+    public int getOriginCPU() {
+        return originCPU;
+    }
+
+    public void setOriginCPU(int originCPU) {
+        this.originCPU = originCPU;
+    }
+
+    public int getExceptionCycle() {
+        return exceptionCycle;
+    }
+
+    public void setExceptionCycle(int exceptionCycle) {
+        this.exceptionCycle = exceptionCycle;
+    }
+
+    public TimeHandler getTimeHandler() {
+        return timeHandler;
+    }
+
+    public void setTimeHandler(TimeHandler timeHandler) {
+        this.timeHandler = timeHandler;
+    }
+
+    public int getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(int processId) {
+        this.processId = processId;
+    }
+
+    public List getInterruptionList() {
+        return interruptionList;
+    }
+
+    public void setInterruptionList(List interruptionList) {
+        this.interruptionList = interruptionList;
+    }
+
+    public Semaphore getMutex() {
+        return mutex;
+    }
+
+    public void setMutex(Semaphore mutex) {
+        this.mutex = mutex;
+    }
     
     
     
