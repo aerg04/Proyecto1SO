@@ -15,6 +15,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.mycompany.proyecto1.Proyecto1</exec.mainClass>
+        <exec.mainClass>main.Proyecto1</exec.mainClass>
     </properties>
 </project>

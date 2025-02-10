@@ -307,6 +307,7 @@ public class W1 extends javax.swing.JFrame {
     private void createProcess1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createProcess1ActionPerformed
         // TODO add your handling code here:
         CreateProcess newProcess = new CreateProcess(this);
+        newProcess.setVisible(true);
     }//GEN-LAST:event_createProcess1ActionPerformed
 
     private void timeSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSlider2StateChanged
