@@ -274,7 +274,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="instructionTime3">
+            <Component class="javax.swing.JLabel" name="cpuUnits">
               <Properties>
                 <Property name="text" type="java.lang.String" value="3"/>
               </Properties>

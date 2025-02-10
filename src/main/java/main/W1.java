@@ -34,6 +34,22 @@ public class W1 extends javax.swing.JFrame {
     public synchronized void createNewProcess(List list,String name,String type,int duration ){
         ProcessImage newProcess = new ProcessImage(list,type,readyList.getSize(),"ready",name,1,0,duration);
         readyList.appendLast(newProcess);
+        NodoList pAux = readyList.getHead();
+        String display = "";
+        while(pAux!=null){
+            ProcessImage process=(ProcessImage) pAux.getValue();
+            display += this.makeString(process);
+            pAux = pAux.getpNext();
+        }
+        this.updateProcess(display);
+    }
+    private String makeString(ProcessImage currentProcess){
+        String display = "\n ----------------------------------\n ID: " + currentProcess.getId() + 
+                "\n Status: " + currentProcess.getStatus()+ 
+                "\n Nombre: " + currentProcess.getName() +
+                "\n PC: " + currentProcess.getProgramCounter() + 
+                "\n MAR: " + currentProcess.getMemoryAddressRegister() ;
+        return display;
     }
     public void updateCPUs(String input, int id){
         switch(id){
@@ -94,7 +110,7 @@ public class W1 extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         cpusSlider = new javax.swing.JSlider();
-        instructionTime3 = new javax.swing.JLabel();
+        cpuUnits = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         cpu2TextArea = new javax.swing.JTextArea();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -207,8 +223,8 @@ public class W1 extends javax.swing.JFrame {
         });
         jPanel2.add(cpusSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 360, 150, -1));
 
-        instructionTime3.setText("3");
-        jPanel2.add(instructionTime3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 380, 10, -1));
+        cpuUnits.setText("3");
+        jPanel2.add(cpuUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 380, 10, -1));
 
         jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -290,10 +306,12 @@ public class W1 extends javax.swing.JFrame {
 
     private void createProcess1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createProcess1ActionPerformed
         // TODO add your handling code here:
+        CreateProcess newProcess = new CreateProcess(this);
     }//GEN-LAST:event_createProcess1ActionPerformed
 
     private void timeSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSlider2StateChanged
         // TODO add your handling code here:
+        this.instructionTime2.setText(this.timeSlider2.getValue()+ " ms");
     }//GEN-LAST:event_timeSlider2StateChanged
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
@@ -302,11 +320,12 @@ public class W1 extends javax.swing.JFrame {
 
     private void cpusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cpusSliderStateChanged
         // TODO add your handling code here:
+        this.cpuUnits.setText(this.cpusSlider.getValue()+ " units");
     }//GEN-LAST:event_cpusSliderStateChanged
 
     private void showUsageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUsageButtonActionPerformed
         // TODO add your handling code here:
-        CreateProcess newProcess = new CreateProcess(this);
+        
     }//GEN-LAST:event_showUsageButtonActionPerformed
 
     /**
@@ -352,10 +371,10 @@ public class W1 extends javax.swing.JFrame {
     private javax.swing.JTextArea cpu1TextArea;
     private javax.swing.JTextArea cpu2TextArea;
     private javax.swing.JTextArea cpu3TextArea;
+    private javax.swing.JLabel cpuUnits;
     private javax.swing.JSlider cpusSlider;
     private javax.swing.JButton createProcess1;
     private javax.swing.JLabel instructionTime2;
-    private javax.swing.JLabel instructionTime3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

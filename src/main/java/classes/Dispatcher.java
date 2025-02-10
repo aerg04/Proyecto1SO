@@ -219,19 +219,19 @@ public class Dispatcher {
         String display = "";
         while(pAux!=null){
             ProcessImage process=(ProcessImage) pAux.getValue();
-            display += process.getId() ;
+            display += this.makeString(process);
             pAux = pAux.getpNext();
         }
         pAux = blockedList.getHead();
         while(pAux!=null){
             ProcessImage process=(ProcessImage) pAux.getValue();
-            display += process.getId() ;
+            display += this.makeString(process);
             pAux = pAux.getpNext();
         }
         pAux = exitList.getHead();
         while(pAux!=null){
             ProcessImage process=(ProcessImage) pAux.getValue();
-            display += process.getId() ;
+            display += this.makeString(process);
             pAux = pAux.getpNext();
         }
         window.updateProcess(display);
