@@ -4,16 +4,14 @@
  */
 package classes;
 
+import primitivas.List;
+import primitivas.NodoList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-/**
- *
- * @author kraik
- */
+
 public class ProcessImageCSV {
-  
+
     // Método para guardar una lista de procesos en un archivo CSV
     public static void saveProcessesToCSV(List<ProcessImage> processes, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -21,11 +19,14 @@ public class ProcessImageCSV {
             writer.write("ID,Name,Type,Status,ProgramCounter,MemoryAddressRegister,Duration,Quantum");
             writer.newLine();
 
-            // Escribir cada proceso en una línea
-            for (ProcessImage process : processes) {
-                writer.write(formatProcessAsCSV(process));
+            // Recorrer la lista de procesos y escribir cada uno en el CSV
+            NodoList<ProcessImage> current = processes.getHead();
+            while (current != null) {
+                writer.write(formatProcessAsCSV(current.getValue()));
                 writer.newLine();
+                current = current.getpNext();
             }
+
             System.out.println("Procesos guardados correctamente en " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
