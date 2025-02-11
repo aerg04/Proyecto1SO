@@ -8,9 +8,11 @@ package main;
 import classes.*;
 import classes.ProcessImage;
 import classes.ProcessImageCSV;
-import primitivas.List;
+import java.util.Scanner;
+import primitivas.*;
 import java.util.concurrent.Semaphore;
-import primitivas.NodoList;
+import javax.swing.JFrame;
+
 
 /**
  *
@@ -53,7 +55,6 @@ public class Proyecto1 {
         w1.setVisible(true);
       
         Semaphore mutexDispatcher = new Semaphore(1);
-        Clock clock = new Clock(mutexDispatcher, onPlayClock, w1);
         TimeHandler timeHandler = new TimeHandler(w1);
         //colas del disptcher
         List blockedList = new List();
@@ -61,6 +62,7 @@ public class Proyecto1 {
         Dispatcher dispatcher = new Dispatcher(readyList,blockedList,exitList,w1);
         
         // para los cpus
+        Clock clock = new Clock(mutexDispatcher, onPlayClock, w1, dispatcher,timeHandler);
         CPU cpu1 = new CPU(timeHandler,dispatcher,1,mutexDispatcher,onPlay,w1);
         CPU cpu2 = new CPU(timeHandler,dispatcher,2,mutexDispatcher, onPlay,w1);
         CPU cpu3 = new CPU(timeHandler,dispatcher,3,mutexDispatcher, onPlay,w1);
@@ -70,4 +72,17 @@ public class Proyecto1 {
         cpu2.start();
 
     }
+//    public static void main(String[] args) {
+//        UtilityGraph example = new UtilityGraph("Bar Chart Example");
+//        example.setSize(800, 400);
+//        example.setLocationRelativeTo(null);
+//        example.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        example.setVisible(true);
+//        Scanner s = new Scanner(System.in);
+//
+//        String s1 = s.nextLine();
+//        // Example of dynamically updating the dataset
+//        example.updateDataset("PCPU 5", 100, 200);
+//        example.updateDataset("PCPU 6", 120, 150);
+//    }
 }

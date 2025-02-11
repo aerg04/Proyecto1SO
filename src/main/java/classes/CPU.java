@@ -53,7 +53,7 @@ public class CPU extends Thread {
         this.getProcess();
         while(true){
             //checkear interrupciones
-            if(!this.interruptionsList.isEmpty()){
+            if(this.interruptionsList.isEmpty()){
                 Exception exception = (Exception) interruptionsList.getHead().getValue();
                 interruptionsList.delete(interruptionsList.getHead());
                 this.interruptHandler(exception);
@@ -81,10 +81,13 @@ public class CPU extends Thread {
                         } catch (InterruptedException ex) {
                             Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        this.updateInterfaceProcess();
+                        window.updateDataset(1, "User", id);
                         //checkear si hay que crear interrupción
                         if(this.isInterruption(memoryAddressRegister)){
                             this.useDispatcher("blocked");
                             this.getProcess();
+
                         }else{
                             // instrucciones inertes
                             //esto es si el proceso continua su ejecución
@@ -99,7 +102,7 @@ public class CPU extends Thread {
         }
     }
     public boolean isInterruption(int mar){
-        for (int i = 0; i < this.currentProcess.getInstructions().getSize()-1; i++) {
+        for (int i = 0; i < this.currentProcess.getInstructions().getSize(); i++) {
             if(i%2==0 && this.currentProcess.getInstructions().getNodoById(i).getValue().equals(mar)){
                 int j = (int) this.currentProcess.getInstructions().getNodoById(i+1).getValue();
                 Exception exception = new Exception(id,j,this.timeHandler,this.currentProcess.getId(),this.interruptionsList,this.mutexExceptions);
@@ -149,23 +152,41 @@ public class CPU extends Thread {
             return output;
     }
     private void getProcess(){
-        this.window.updateCPUs("Dispatcher(OS)", id);
-        for (int i = 1; i < 4; i++) {
-        try {
-            sleep(timeHandler.getInstructionTime());
-        } catch (InterruptedException ex) {
-            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+        //esto es para nada mas que no explote el thread cuando no haya mas proceso
+        currentProcess = null;
+        while(currentProcess==null){
+            this.window.updateCPUs("Dispatcher(OS)", id);
+            for (int i = 1; i < 4; i++) {
+            try {
+                sleep(timeHandler.getInstructionTime());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            window.updateDataset(1, "OS", id);
+            }
+            try {
+                //Aqui va un semaforo
+                    mutexCPUs.acquire();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.currentProcess = this.dispatcher.getProcess();
+            mutexCPUs.release();
+            if(currentProcess != null) break;
+            this.window.updateCPUs("Process System", id);
+            try {
+                sleep(timeHandler.getInstructionTime());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            window.updateDataset(1, "OS", id);
+            if(this.interruptionsList.isEmpty()){
+                Exception exception = (Exception) interruptionsList.getHead().getValue();
+                interruptionsList.delete(interruptionsList.getHead());
+                this.interruptHandler(exception);
+            }
         }
-        }
-        try {
-            //Aqui va un semaforo
-                mutexCPUs.acquire();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.currentProcess = this.dispatcher.getProcess();
-        mutexCPUs.release();
-
+        //
         quantum = currentProcess.getQuantum();
         programCounter = currentProcess.getProgramCounter()+1;
         memoryAddressRegister = currentProcess.getProgramCounter();
@@ -175,10 +196,10 @@ public class CPU extends Thread {
     
     private void updateInterfaceProcess(){
         String display = "ID: " + currentProcess.getId() + 
-                "\n Status: " + currentProcess.getStatus()+ 
-                "\n Nombre: " + currentProcess.getName() +
-                "\n PC: " + programCounter + 
-                "\n MAR: " + this.memoryAddressRegister ;
+                "\nStatus: " + currentProcess.getStatus()+ 
+                "\nName: " + currentProcess.getName() +
+                "\nPC: " + programCounter + 
+                "\nMAR: " + this.memoryAddressRegister ;
         this.window.updateCPUs(display, id);
     }
 }
