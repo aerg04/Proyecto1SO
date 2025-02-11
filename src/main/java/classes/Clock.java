@@ -21,11 +21,13 @@ public class Clock extends Thread {
     private Dispatcher dispatcher;
     private W1 window;
     private int cycle;
-    public Clock(Semaphore mutex,Semaphore onPlay,W1 window) {
+    public Clock(Semaphore mutex,Semaphore onPlay,W1 window,Dispatcher dispatcher, TimeHandler timeHandler) {
         this.mutex = mutex;
         this.onPlay = onPlay;
         this.window = window;
         this.cycle = 0;
+        this.dispatcher = dispatcher;
+        this.timeHandler = timeHandler;
     }
     
     /**

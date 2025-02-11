@@ -6,6 +6,8 @@ package main;
 import primitivas.*;
 import classes.*;
 import java.util.concurrent.Semaphore;
+import javax.swing.JFrame;
+
 /**
  *
  * @author DELL
@@ -14,6 +16,7 @@ public class W1 extends javax.swing.JFrame {
     public Semaphore onPlay;
     public Semaphore onPlayClock;
     public List readyList;
+    public UtilityGraph w2;
     /**
      * Creates new form W1
      */
@@ -25,6 +28,7 @@ public class W1 extends javax.swing.JFrame {
         this.onPlay = onPlay;
         this.onPlayClock = onPlay1;
         this.readyList = readyList;
+        w2 = new UtilityGraph("CPUs usage");
     }
     public W1() {
         initComponents();
@@ -64,12 +68,15 @@ public class W1 extends javax.swing.JFrame {
                 }           
         }
     }
+    public synchronized void updateDataset(int instruction, String type,int cpu){
+        w2.updateDataset(cpu,type, instruction);
+    }
     
     public int getSelectAlgorithm(){
         return this.selectDispatcher1.getSelectedIndex();
     }
     public void updateReady(String text){
-        this.blockedTextArea.setText(text);
+        this.readyTextArea.setText(text);
     } 
     public void updateBlock(String text){
         this.blockedTextArea.setText(text);
@@ -94,20 +101,18 @@ public class W1 extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jSeparator2 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         selectDispatcher1 = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         readyList1 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
+        readyTextArea = new javax.swing.JTextArea();
         playButton = new javax.swing.JButton();
         createProcess1 = new javax.swing.JButton();
         timeSlider2 = new javax.swing.JSlider();
         instructionTime2 = new javax.swing.JLabel();
         saveButton = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel15 = new javax.swing.JLabel();
@@ -135,9 +140,6 @@ public class W1 extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 10, 160));
-
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         selectDispatcher1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FSFC", "Round Robin", "SPN", "SRT", "HRR" }));
@@ -147,7 +149,7 @@ public class W1 extends javax.swing.JFrame {
                 selectDispatcher1ActionPerformed(evt);
             }
         });
-        jPanel2.add(selectDispatcher1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 350, 190, -1));
+        jPanel2.add(selectDispatcher1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 230, 190, -1));
 
         jLabel10.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel10.setText("CPU2");
@@ -159,11 +161,11 @@ public class W1 extends javax.swing.JFrame {
 
         readyList1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(5);
-        readyList1.setViewportView(jTextArea4);
+        readyTextArea.setColumns(20);
+        readyTextArea.setRows(5);
+        readyList1.setViewportView(readyTextArea);
 
-        jPanel2.add(readyList1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 130, 220));
+        jPanel2.add(readyList1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, 150, 170));
 
         playButton.setText("Play");
         playButton.addActionListener(new java.awt.event.ActionListener() {
@@ -171,7 +173,7 @@ public class W1 extends javax.swing.JFrame {
                 playButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(playButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 450, 70, -1));
+        jPanel2.add(playButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 440, 140, -1));
 
         createProcess1.setText("Create Process");
         createProcess1.addActionListener(new java.awt.event.ActionListener() {
@@ -179,7 +181,7 @@ public class W1 extends javax.swing.JFrame {
                 createProcess1ActionPerformed(evt);
             }
         });
-        jPanel2.add(createProcess1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 450, -1, -1));
+        jPanel2.add(createProcess1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 360, 140, -1));
 
         timeSlider2.setMaximum(10000);
         timeSlider2.setValue(5000);
@@ -188,10 +190,10 @@ public class W1 extends javax.swing.JFrame {
                 timeSlider2StateChanged(evt);
             }
         });
-        jPanel2.add(timeSlider2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 360, -1, -1));
+        jPanel2.add(timeSlider2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 80, -1, -1));
 
         instructionTime2.setText("5000");
-        jPanel2.add(instructionTime2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, -1, -1));
+        jPanel2.add(instructionTime2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 100, 50, -1));
 
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -199,25 +201,24 @@ public class W1 extends javax.swing.JFrame {
                 saveButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(saveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 450, 100, -1));
+        jPanel2.add(saveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 400, 140, -1));
 
         jLabel12.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel12.setText("CPU1");
         jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
-        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 320, 500, 10));
 
         jLabel14.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel14.setText("Blocked");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, -1, -1));
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, -1, -1));
 
         jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 10, 160));
+        jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 10, 460));
 
         jLabel15.setText("Instruction Time");
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, -1, 20));
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 60, -1, 20));
 
         jLabel16.setText("CPUs");
-        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 340, -1, 20));
+        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 140, -1, 20));
 
         cpusSlider.setMajorTickSpacing(1);
         cpusSlider.setMaximum(3);
@@ -228,10 +229,10 @@ public class W1 extends javax.swing.JFrame {
                 cpusSliderStateChanged(evt);
             }
         });
-        jPanel2.add(cpusSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 360, 150, -1));
+        jPanel2.add(cpusSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 160, 200, -1));
 
         cpuUnits.setText("3");
-        jPanel2.add(cpuUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 380, 10, -1));
+        jPanel2.add(cpuUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 180, 60, -1));
 
         jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -266,7 +267,7 @@ public class W1 extends javax.swing.JFrame {
         blockedTextArea.setRows(5);
         blockedList.setViewportView(blockedTextArea);
 
-        jPanel2.add(blockedList, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 130, 220));
+        jPanel2.add(blockedList, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, 150, 170));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -274,15 +275,15 @@ public class W1 extends javax.swing.JFrame {
         jTextArea3.setRows(5);
         jScrollPane2.setViewportView(jTextArea3);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 80, 130, 230));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, 150, 390));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel5.setText("Ready");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("PCBs");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 50, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
 
         showUsageButton.setText("Show Usage");
         showUsageButton.addActionListener(new java.awt.event.ActionListener() {
@@ -290,7 +291,7 @@ public class W1 extends javax.swing.JFrame {
                 showUsageButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(showUsageButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 450, 100, -1));
+        jPanel2.add(showUsageButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 280, 140, -1));
 
         insntrucionTextArea.setEditable(false);
         insntrucionTextArea.setText("0");
@@ -299,10 +300,10 @@ public class W1 extends javax.swing.JFrame {
                 insntrucionTextAreaActionPerformed(evt);
             }
         });
-        jPanel2.add(insntrucionTextArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 110, -1));
+        jPanel2.add(insntrucionTextArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, 110, -1));
 
         jLabel2.setText("Cycle:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 490));
 
@@ -321,6 +322,7 @@ public class W1 extends javax.swing.JFrame {
         onPlayClock.release();
         this.createProcess1.setEnabled(false);
         this.cpusSlider.setEnabled(false);
+        this.playButton.setEnabled(false);
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void createProcess1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createProcess1ActionPerformed
@@ -345,7 +347,10 @@ public class W1 extends javax.swing.JFrame {
 
     private void showUsageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUsageButtonActionPerformed
         // TODO add your handling code here:
-        
+        w2.setSize(800, 400);
+        w2.setLocationRelativeTo(null);
+        w2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        w2.setVisible(true);
     }//GEN-LAST:event_showUsageButtonActionPerformed
 
     private void insntrucionTextAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insntrucionTextAreaActionPerformed
@@ -415,13 +420,11 @@ public class W1 extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
     private javax.swing.JButton playButton;
     private javax.swing.JScrollPane readyList1;
+    private javax.swing.JTextArea readyTextArea;
     private javax.swing.JButton saveButton;
     private javax.swing.JComboBox<String> selectDispatcher1;
     private javax.swing.JButton showUsageButton;

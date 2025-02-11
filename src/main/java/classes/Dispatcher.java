@@ -28,26 +28,26 @@ public class Dispatcher {
     
     public ProcessImage getProcess(){
         ProcessImage output = null;
-        if(!this.readyList.isEmpty()){
+        if(this.readyList.isEmpty()){
         window.getSelectAlgorithm();
         switch(window.getSelectAlgorithm()){
-            case 1 -> {
+            case 0 -> {
                 //FCFS
                 output = this.FCFS();
                 }
-            case 2 -> {
+            case 1 -> {
                 //round robin
                  output = this.RoundRobin();
                 }
-            case 3 -> {
+            case 2 -> {
                 output = this.SPN();
                 // SPN
                 }
-            case 4 -> {
+            case 3 -> {
                  output = this.SRT();
                 //SRT
                 }
-            case 5 -> {
+            case 4 -> {
                 //HRR
                  output = this.HRR();
                 }
@@ -57,6 +57,11 @@ public class Dispatcher {
          //aqui hay que actulizar la interfaz
         this.updateReadyList();
         this.updateProcessList();
+        if(output == null){
+            System.out.println("process null") ;
+            System.out.println(readyList.isEmpty()+"");
+            System.out.println(readyList.getHead()+"");
+        }
         return output;    
     }
     private ProcessImage FCFS(){
@@ -166,7 +171,7 @@ public class Dispatcher {
         process.setProgramCounter(programCounter);
         process.setMemoryAddressRegister(memoryAddressRegister);
         process.setWaitingTime(0);
-        if(state=="bloked"){
+        if(state=="blocked"){
             this.blockedList.appendLast(process);   
         }else if(state=="ready"){
             this.readyList.appendLast(process);
@@ -180,7 +185,7 @@ public class Dispatcher {
     public void updatePCB(ProcessImage process,String state){
         process.setStatus(state);
         process.setWaitingTime(0);
-        if(state=="bloked"){
+        if(state=="blocked"){
             this.blockedList.appendLast(process);   
         }else if(state=="ready"){
             this.readyList.appendLast(process);
@@ -253,6 +258,7 @@ public class Dispatcher {
     public void updateBlockedList(){
         NodoList pAux = blockedList.getHead();
         String display = "";
+        System.out.println(pAux);
         while(pAux!=null){
             ProcessImage process=(ProcessImage) pAux.getValue();
             

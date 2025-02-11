@@ -1,3 +1,5 @@
+package main;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -10,6 +12,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import javax.swing.SwingUtilities;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -24,7 +27,7 @@ public class UtilityGraph extends JFrame {
         // Create chart
         JFreeChart chart = ChartFactory.createStackedBarChart(
                 "Number of Instructions Executed per PCPU",
-                "PCPU",
+                "CPU",
                 "Number of Instructions",
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -44,25 +47,35 @@ public class UtilityGraph extends JFrame {
     private DefaultCategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
-        dataset.addValue(50, "User", "PCPU 1");
-        dataset.addValue(100, "OS", "PCPU 1");
+        dataset.addValue(0, "User", "CPU 1");
+        dataset.addValue(0, "OS", "CPU 1");
 
-        dataset.addValue(70, "User", "PCPU 2");
-        dataset.addValue(80, "OS", "PCPU 2");
+        dataset.addValue(0, "User", "CPU 2");
+        dataset.addValue(0, "OS", "CPU 2");
 
-        dataset.addValue(60, "User", "PCPU 3");
-        dataset.addValue(140, "OS", "PCPU 3");
+        dataset.addValue(0, "User", "CPU 3");
+        dataset.addValue(0, "OS", "CPU 3");
 
-        dataset.addValue(90, "User", "PCPU 4");
-        dataset.addValue(160, "OS", "PCPU 4");
+        dataset.addValue(0, "User", "Total");
+        dataset.addValue(0, "OS", "Total");
         
         return dataset;
     }
 
-    public void updateDataset(String pcpu, int userInstructions, int osInstructions) {
-        dataset.addValue(userInstructions, "User", pcpu);
-        dataset.addValue(osInstructions, "OS", pcpu);
+    public void updateDataset(int cpu, String type, int instructions) {
+        SwingUtilities.invokeLater(() -> {
+        Number existingValue = dataset.getValue(type, "CPU " + cpu);
+        int newValue = existingValue.intValue() + instructions;
+        dataset.addValue(newValue, type, "CPU " + cpu);
+
+        // Update the total
+        Number existingTotalValue = dataset.getValue(type, "Total");
+        int newTotalValue = existingTotalValue.intValue() + instructions;
+        dataset.addValue(newTotalValue, type, "Total");
+        ((ChartPanel) getContentPane()).repaint();
+    });
     }
+   
 
     
 }

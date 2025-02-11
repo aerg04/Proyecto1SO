@@ -66,7 +66,7 @@ public class CreateProcess extends javax.swing.JFrame {
     }
 
     //verificar que sea par
-    if(instructions.getSize()%2 == 0){
+    if(instructions.getSize()%2 == 1){
         return false;
     }
     // Check if even-indexed values are in ascending order
@@ -174,8 +174,16 @@ public class CreateProcess extends javax.swing.JFrame {
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
         if (this.validateTextAreaInput(this.jTextArea1.getText())){
-            father.createNewProcess(instructions, nameTextField.getText(), (String) typeComboBox.getSelectedItem(), Integer.parseInt(durationTextField.getText().trim()));
-            this.dispose();
+            if (!nameTextField.getText().trim().isEmpty()) {
+                    try{
+                        father.createNewProcess(instructions, nameTextField.getText(), (String) typeComboBox.getSelectedItem(), Integer.parseInt(durationTextField.getText().trim()));
+                        this.dispose(); 
+                    }catch(NumberFormatException e){
+                        javax.swing.JOptionPane.showMessageDialog(this, "Duration must be a number", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
+            }else{
+                javax.swing.JOptionPane.showMessageDialog(this, "Name cannot be empty", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
         }else{
             javax.swing.JOptionPane.showMessageDialog(this, "Text Area eror ex. 1,2,3,8,", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
@@ -193,7 +201,7 @@ public class CreateProcess extends javax.swing.JFrame {
         // TODO add your handling code here:
         // Validate that the duration is a number
         try {
-            Integer.parseInt(durationTextField.getText().trim());
+            int number = Integer.parseInt(durationTextField.getText().trim());
         } catch (NumberFormatException e) {
             javax.swing.JOptionPane.showMessageDialog(this, "Duration must be a number", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
