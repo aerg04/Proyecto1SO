@@ -176,7 +176,7 @@ public class CPU extends Thread {
     private void updateInterfaceProcess(){
         String display = "ID: " + currentProcess.getId() + 
                 "\n Status: " + currentProcess.getStatus()+ 
-                "\n Nombre: " + currentProcess.getName() +
+                "\n Name: " + currentProcess.getName() +
                 "\n PC: " + programCounter + 
                 "\n MAR: " + this.memoryAddressRegister ;
         this.window.updateCPUs(display, id);

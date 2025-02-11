@@ -65,6 +65,10 @@ public class CreateProcess extends javax.swing.JFrame {
         return false; // Input must be integers
     }
 
+    //verificar que sea par
+    if(instructions.getSize()%2 == 0){
+        return false;
+    }
     // Check if even-indexed values are in ascending order
     for (int i = 2; i < instructions.getSize(); i += 2) {
         if ((int)instructions.getNodoById(i).getValue() <= (int) instructions.getNodoById(i - 2).getValue()) {
@@ -156,7 +160,7 @@ public class CreateProcess extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
         );
 
         pack();

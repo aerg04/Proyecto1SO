@@ -46,7 +46,7 @@ public class W1 extends javax.swing.JFrame {
     private String makeString(ProcessImage currentProcess){
         String display = "\n ----------------------------------\n ID: " + currentProcess.getId() + 
                 "\n Status: " + currentProcess.getStatus()+ 
-                "\n Nombre: " + currentProcess.getName() +
+                "\n Name: " + currentProcess.getName() +
                 "\n PC: " + currentProcess.getProgramCounter() + 
                 "\n MAR: " + currentProcess.getMemoryAddressRegister() ;
         return display;
