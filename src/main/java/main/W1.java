@@ -7,6 +7,7 @@ import primitivas.*;
 import classes.*;
 import java.util.concurrent.Semaphore;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -337,7 +338,26 @@ public class W1 extends javax.swing.JFrame {
     }//GEN-LAST:event_timeSlider2StateChanged
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
+        // Obtener los valores seleccionados
+    int selectedAlgorithm = selectDispatcher1.getSelectedIndex(); // Índice del algoritmo seleccionado
+    int selectedTime = timeSlider2.getValue(); // Valor del slider de tiempo
+    int selectedCPUs = cpusSlider.getValue(); // Valor del slider de CPUs
+
+    // Crear una lista con los datos a guardar
+    List<ProcessImage> processList = new List<>();
+    
+    // Crear un proceso con estos valores (como referencia, ya que no hay ejecución real)
+    ProcessImage process = new ProcessImage(null, "Config", selectedAlgorithm, "Saved", "DispatcherConfig", selectedTime, selectedCPUs, 0);
+    
+    // Agregar el proceso a la lista
+    processList.appendLast(process);
+
+    // Guardar la lista en CSV
+    String filePath = "configuracion.csv"; // Nombre del archivo
+    ProcessImageCSV.saveProcessesToCSV(processList, filePath);
+
+    // Mostrar mensaje de éxito
+    JOptionPane.showMessageDialog(this, "Configuración guardada en " + filePath);
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void cpusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cpusSliderStateChanged
