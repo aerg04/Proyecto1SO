@@ -5,6 +5,10 @@
 package main;
 import primitivas.*;
 import classes.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -22,6 +26,36 @@ public class W1 extends javax.swing.JFrame {
      * Creates new form W1
      */
     
+    private void loadConfig() {
+    String filePath = "configuracion.csv";
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line = reader.readLine(); // Leer la única línea del archivo
+
+        if (line != null) {
+            String[] values = line.split(",");
+            if (values.length < 3) {
+                System.out.println("Error: El archivo de configuración no tiene el formato correcto.");
+                return;
+            }
+
+            // Convertir los valores a enteros
+            int selectedAlgorithm = Integer.parseInt(values[0]);
+            int numberOfInstructions = Integer.parseInt(values[1]);
+            int numberOfCPUs = Integer.parseInt(values[2]);
+
+            // Aplicar los valores en la interfaz gráfica
+            selectDispatcher1.setSelectedIndex(selectedAlgorithm);
+            timeSlider2.setValue(numberOfInstructions);
+            cpusSlider.setValue(numberOfCPUs);
+
+            System.out.println("Configuración cargada desde CSV.");
+        }
+    } catch (IOException e) {
+        System.out.println("No se encontró el archivo de configuración. Se usarán valores por defecto.");
+    }
+}
+    
     public W1(Semaphore onPlay,Semaphore onPlay1,List readyList) {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -30,12 +64,16 @@ public class W1 extends javax.swing.JFrame {
         this.onPlayClock = onPlay1;
         this.readyList = readyList;
         w2 = new UtilityGraph("CPUs usage");
+        
+        // Cargar configuración desde CSV al iniciar
+        loadConfig();
     }
     public W1() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
+    
     public synchronized void createNewProcess(List list,String name,String type,int duration ){
         ProcessImage newProcess = new ProcessImage(list,type,readyList.getSize(),"ready",name,1,0,duration);
         readyList.appendLast(newProcess);
@@ -339,25 +377,23 @@ public class W1 extends javax.swing.JFrame {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // Obtener los valores seleccionados
-    int selectedAlgorithm = selectDispatcher1.getSelectedIndex(); // Índice del algoritmo seleccionado
-    int selectedTime = timeSlider2.getValue(); // Valor del slider de tiempo
-    int selectedCPUs = cpusSlider.getValue(); // Valor del slider de CPUs
+    int selectedAlgorithm = selectDispatcher1.getSelectedIndex(); // Algoritmo seleccionado
+    int numberOfInstructions = timeSlider2.getValue(); // Número de instrucciones
+    int numberOfCPUs = cpusSlider.getValue(); // Número de CPUs
 
-    // Crear una lista con los datos a guardar
-    List<ProcessImage> processList = new List<>();
-    
-    // Crear un proceso con estos valores (como referencia, ya que no hay ejecución real)
-    ProcessImage process = new ProcessImage(null, "Config", selectedAlgorithm, "Saved", "DispatcherConfig", selectedTime, selectedCPUs, 0);
-    
-    // Agregar el proceso a la lista
-    processList.appendLast(process);
+    // Ruta del archivo
+    String filePath = "configuracion.csv"; 
 
-    // Guardar la lista en CSV
-    String filePath = "configuracion.csv"; // Nombre del archivo
-    ProcessImageCSV.saveProcessesToCSV(processList, filePath);
-
-    // Mostrar mensaje de éxito
-    JOptionPane.showMessageDialog(this, "Configuración guardada en " + filePath);
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        // Guardar los valores en una sola línea
+        writer.write(selectedAlgorithm + "," + numberOfInstructions + "," + numberOfCPUs);
+        writer.newLine();
+        
+        JOptionPane.showMessageDialog(this, "Configuración guardada en " + filePath);
+    } catch (IOException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al guardar la configuración");
+    }
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void cpusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cpusSliderStateChanged
