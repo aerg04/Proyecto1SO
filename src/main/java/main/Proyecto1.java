@@ -10,6 +10,7 @@ import classes.ProcessImage;
 import classes.ProcessImageCSV;
 import primitivas.List;
 import java.util.concurrent.Semaphore;
+import primitivas.NodoList;
 
 /**
  *
@@ -18,16 +19,6 @@ import java.util.concurrent.Semaphore;
 public class Proyecto1 {
 
     public static void main(String[] args) {
-        //aqui hay que cargar los procesos de las lista
-        
-        //para sincronizar los cpu al iniciar la simulación
-        Semaphore onPlay = new Semaphore(0);
-        Semaphore onPlayClock = new Semaphore(0);
-        List readyList = new List();
-        
-        W1 w1 = new W1(onPlay,onPlayClock,readyList);
-        w1.setVisible(true);
-
         
         List<ProcessImage> processes = new List<>();
 
@@ -37,6 +28,30 @@ public class Proyecto1 {
 
         // Guardar en CSV
         ProcessImageCSV.saveProcessesToCSV(processes, "procesos.csv");
+        
+        //aqui hay que cargar los procesos de las lista
+        
+        String filePath = "procesos.csv";
+
+        // Leer procesos desde CSV
+        List<ProcessImage> loadedProcesses = ProcessImageCSV.readProcessesFromCSV(filePath);
+
+        // Mostrar los procesos cargados
+        NodoList<ProcessImage> current = loadedProcesses.getHead();
+        while (current != null) {
+            ProcessImage p = current.getValue();
+            System.out.println("ID: " + p.getId() + ", Nombre: " + p.getName() + ", Estado: " + p.getStatus());
+            current = current.getpNext();
+        }
+        
+        //para sincronizar los cpu al iniciar la simulación
+        Semaphore onPlay = new Semaphore(0);
+        Semaphore onPlayClock = new Semaphore(0);
+        List readyList = new List();
+        
+        W1 w1 = new W1(onPlay,onPlayClock,readyList);
+        w1.setVisible(true);
+      
         Semaphore mutexDispatcher = new Semaphore(1);
         Clock clock = new Clock(mutexDispatcher, onPlayClock, w1);
         TimeHandler timeHandler = new TimeHandler(w1);
