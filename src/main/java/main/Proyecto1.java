@@ -38,7 +38,7 @@ public class Proyecto1 {
         // Guardar en CSV
         ProcessImageCSV.saveProcessesToCSV(processes, "procesos.csv");
         Semaphore mutexDispatcher = new Semaphore(1);
-        Clock clock = new Clock(mutexDispatcher, onPlayClock);
+        Clock clock = new Clock(mutexDispatcher, onPlayClock, w1);
         TimeHandler timeHandler = new TimeHandler(w1);
         //colas del disptcher
         List blockedList = new List();

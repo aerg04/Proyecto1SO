@@ -8,6 +8,7 @@ import static java.lang.Thread.sleep;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import main.*;
 
 /**
  *
@@ -18,9 +19,13 @@ public class Clock extends Thread {
     private Semaphore onPlay;
     private TimeHandler timeHandler;
     private Dispatcher dispatcher;
-    public Clock(Semaphore mutex,Semaphore onPlay) {
+    private W1 window;
+    private int cycle;
+    public Clock(Semaphore mutex,Semaphore onPlay,W1 window) {
         this.mutex = mutex;
         this.onPlay = onPlay;
+        this.window = window;
+        this.cycle = 0;
     }
     
     /**
@@ -42,6 +47,8 @@ public class Clock extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
             }
+            cycle++;
+            window.updateCycle(cycle);
         }
     }
     

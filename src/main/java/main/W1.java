@@ -80,6 +80,9 @@ public class W1 extends javax.swing.JFrame {
     public int getTime(){
         return this.timeSlider2.getValue();
     }
+    public void updateCycle(int in){
+        this.insntrucionTextArea.setText(in+"");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -124,6 +127,8 @@ public class W1 extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         showUsageButton = new javax.swing.JButton();
+        insntrucionTextArea = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -158,7 +163,7 @@ public class W1 extends javax.swing.JFrame {
         jTextArea4.setRows(5);
         readyList1.setViewportView(jTextArea4);
 
-        jPanel2.add(readyList1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 130, 250));
+        jPanel2.add(readyList1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 130, 220));
 
         playButton.setText("Play");
         playButton.addActionListener(new java.awt.event.ActionListener() {
@@ -203,7 +208,7 @@ public class W1 extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel14.setText("Blocked");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, -1, -1));
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, -1, -1));
 
         jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 10, 160));
@@ -214,8 +219,10 @@ public class W1 extends javax.swing.JFrame {
         jLabel16.setText("CPUs");
         jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 340, -1, 20));
 
+        cpusSlider.setMajorTickSpacing(1);
         cpusSlider.setMaximum(3);
         cpusSlider.setMinimum(1);
+        cpusSlider.setMinorTickSpacing(1);
         cpusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 cpusSliderStateChanged(evt);
@@ -259,7 +266,7 @@ public class W1 extends javax.swing.JFrame {
         blockedTextArea.setRows(5);
         blockedList.setViewportView(blockedTextArea);
 
-        jPanel2.add(blockedList, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, 130, 250));
+        jPanel2.add(blockedList, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 130, 220));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -267,15 +274,15 @@ public class W1 extends javax.swing.JFrame {
         jTextArea3.setRows(5);
         jScrollPane2.setViewportView(jTextArea3);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 60, 130, 250));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 80, 130, 230));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel5.setText("Ready");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("PCBs");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 50, -1, -1));
 
         showUsageButton.setText("Show Usage");
         showUsageButton.addActionListener(new java.awt.event.ActionListener() {
@@ -284,6 +291,18 @@ public class W1 extends javax.swing.JFrame {
             }
         });
         jPanel2.add(showUsageButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 450, 100, -1));
+
+        insntrucionTextArea.setEditable(false);
+        insntrucionTextArea.setText("0");
+        insntrucionTextArea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insntrucionTextAreaActionPerformed(evt);
+            }
+        });
+        jPanel2.add(insntrucionTextArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 110, -1));
+
+        jLabel2.setText("Cycle:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 490));
 
@@ -328,6 +347,10 @@ public class W1 extends javax.swing.JFrame {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_showUsageButtonActionPerformed
+
+    private void insntrucionTextAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insntrucionTextAreaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_insntrucionTextAreaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -375,6 +398,7 @@ public class W1 extends javax.swing.JFrame {
     private javax.swing.JLabel cpuUnits;
     private javax.swing.JSlider cpusSlider;
     private javax.swing.JButton createProcess1;
+    private javax.swing.JTextField insntrucionTextArea;
     private javax.swing.JLabel instructionTime2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -383,6 +407,7 @@ public class W1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
