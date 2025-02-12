@@ -221,7 +221,7 @@ public class W1 extends javax.swing.JFrame {
                 createProcess1ActionPerformed(evt);
             }
         });
-        jPanel2.add(createProcess1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 360, 140, -1));
+        jPanel2.add(createProcess1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 400, 140, -1));
 
         timeSlider2.setMaximum(10000);
         timeSlider2.setValue(5000);
@@ -232,8 +232,8 @@ public class W1 extends javax.swing.JFrame {
         });
         jPanel2.add(timeSlider2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 80, -1, -1));
 
-        instructionTime2.setText("5000");
-        jPanel2.add(instructionTime2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 100, 50, -1));
+        instructionTime2.setText("5000 ms");
+        jPanel2.add(instructionTime2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 50, -1));
 
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -241,7 +241,7 @@ public class W1 extends javax.swing.JFrame {
                 saveButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(saveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 400, 140, -1));
+        jPanel2.add(saveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 320, 140, -1));
 
         jLabel12.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel12.setText("CPU1");
@@ -271,7 +271,7 @@ public class W1 extends javax.swing.JFrame {
         });
         jPanel2.add(cpusSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 160, 200, -1));
 
-        cpuUnits.setText("3");
+        cpuUnits.setText("3 units");
         jPanel2.add(cpuUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 180, 60, -1));
 
         jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -340,10 +340,10 @@ public class W1 extends javax.swing.JFrame {
                 insntrucionTextAreaActionPerformed(evt);
             }
         });
-        jPanel2.add(insntrucionTextArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, 110, -1));
+        jPanel2.add(insntrucionTextArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 20, 110, -1));
 
         jLabel2.setText("Cycle:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 490));
 
