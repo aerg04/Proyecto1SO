@@ -22,18 +22,41 @@ public class Proyecto1 {
 
     public static void main(String[] args) {
         
-        List<ProcessImage> processes = new List<>();
+        // Crear lista de procesos
+        List<ProcessImage> processList = new List<>();
 
-        // Crear procesos de ejemplo y agregarlos a la lista
-        processes.appendLast(new ProcessImage(null, "System", 1, "Running", "Process1", 100, 200, 50));
-        processes.appendLast(new ProcessImage(null, "User", 2, "Waiting", "Process2", 150, 250, 30));
+        // Crear lista de instrucciones para cada proceso
+        List<Integer> instructions1 = new List<>();
+        instructions1.appendLast(10);
+        instructions1.appendLast(20);
+        instructions1.appendLast(30);
 
-        // Guardar en CSV
-        ProcessImageCSV.saveProcessesToCSV(processes, "procesos.csv");
-        
-        //aqui hay que cargar los procesos de las lista
-        
+        List<Integer> instructions2 = new List<>();
+        instructions2.appendLast(5);
+        instructions2.appendLast(15);
+        instructions2.appendLast(25);
+        instructions2.appendLast(35);
+
+        List<Integer> instructions3 = new List<>();
+        instructions3.appendLast(1);
+        instructions3.appendLast(2);
+        instructions3.appendLast(3);
+        instructions3.appendLast(4);
+        instructions3.appendLast(5);
+
+        // Crear procesos con instrucciones
+        ProcessImage p1 = new ProcessImage(instructions1, "System", 1, "Running", "Process1", 100, 200, 50);
+        ProcessImage p2 = new ProcessImage(instructions2, "User", 2, "Waiting", "Process2", 150, 250, 30);
+        ProcessImage p3 = new ProcessImage(instructions3, "Kernel", 3, "Blocked", "Process3", 200, 300, 40);
+
+        // Agregar procesos a la lista
+        processList.appendLast(p1);
+        processList.appendLast(p2);
+        processList.appendLast(p3);
+
+        // Guardar procesos en CSV
         String filePath = "procesos.csv";
+        ProcessImageCSV.saveProcessesToCSV(processList, filePath);
 
         // Leer procesos desde CSV
         List<ProcessImage> loadedProcesses = ProcessImageCSV.readProcessesFromCSV(filePath);
