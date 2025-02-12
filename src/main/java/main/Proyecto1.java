@@ -21,7 +21,6 @@ import javax.swing.JFrame;
 public class Proyecto1 {
 
     public static void main(String[] args) {
-        
 //        List<ProcessImage> processes = new List<>();
 //
 //        // Crear procesos de ejemplo y agregarlos a la lista
