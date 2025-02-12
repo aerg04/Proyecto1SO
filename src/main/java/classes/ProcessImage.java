@@ -87,11 +87,10 @@ public class ProcessImage {
         this.memoryAddressRegister = memoryAddressRegister;
     }
     
-    
-    public List getInstructions() {
-        return instructions;
-    }
-
+    /**
+     *
+     * @return
+     */
     public int getDuration() {
         return duration;
     }
@@ -108,8 +107,11 @@ public class ProcessImage {
         this.quantum = quantum;
     }
     
-    
-    public void setInstructions(List instructions) {
-        this.instructions = instructions;
-    }  
+    public List getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<Integer> instructions) {
+        this.instructions = (instructions != null) ? instructions : new List<>();
+    }
 }
