@@ -22,6 +22,7 @@ public class W1 extends javax.swing.JFrame {
     public Semaphore onPlay;
     public Semaphore onPlayClock;
     public List readyList;
+    public List allProcessList;
     public UtilityGraph w2;
     /**
      * Creates new form W1
@@ -57,17 +58,19 @@ public class W1 extends javax.swing.JFrame {
     }
 }
     
-    public W1(Semaphore onPlay,Semaphore onPlay1,List readyList) {
+    public W1(Semaphore onPlay,Semaphore onPlay1,List readyList,List allProcess) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.onPlay = onPlay;
         this.onPlayClock = onPlay1;
         this.readyList = readyList;
+        this.allProcessList = allProcess;
         w2 = new UtilityGraph("CPUs usage");
         
         // Cargar configuración desde CSV al iniciar
         loadConfig();
+        this.updatePCBs();
     }
     public W1() {
         initComponents();
@@ -78,6 +81,10 @@ public class W1 extends javax.swing.JFrame {
     public synchronized void createNewProcess(List list,String name,String type,int duration ){
         ProcessImage newProcess = new ProcessImage(list,type,readyList.getSize(),"ready",name,1,0,duration);
         readyList.appendLast(newProcess);
+        allProcessList.appendLast(newProcess);
+        updatePCBs();
+    }
+    private void updatePCBs(){
         NodoList pAux = readyList.getHead();
         String display = "";
         while(pAux!=null){
@@ -120,7 +127,11 @@ public class W1 extends javax.swing.JFrame {
     } 
     public void updateBlock(String text){
         this.blockedTextArea.setText(text);
-    } 
+    }
+    public void updateExit(String text){
+        this.exitTextArea.setText(text);
+    }
+    
     public void updateProcess(String text){
         this.jTextArea3.setText(text);
     }
@@ -166,7 +177,7 @@ public class W1 extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         cpu3TextArea = new javax.swing.JTextArea();
         blockedList = new javax.swing.JScrollPane();
-        blockedTextArea = new javax.swing.JTextArea();
+        exitTextArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea3 = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
@@ -174,6 +185,9 @@ public class W1 extends javax.swing.JFrame {
         showUsageButton = new javax.swing.JButton();
         insntrucionTextArea = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        blockedList1 = new javax.swing.JScrollPane();
+        blockedTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -205,7 +219,7 @@ public class W1 extends javax.swing.JFrame {
         readyTextArea.setRows(5);
         readyList1.setViewportView(readyTextArea);
 
-        jPanel2.add(readyList1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, 150, 170));
+        jPanel2.add(readyList1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 150, 120));
 
         playButton.setText("Play");
         playButton.addActionListener(new java.awt.event.ActionListener() {
@@ -248,8 +262,8 @@ public class W1 extends javax.swing.JFrame {
         jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
 
         jLabel14.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel14.setText("Blocked");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, -1, -1));
+        jLabel14.setText("Exit");
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, -1, -1));
 
         jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 10, 460));
@@ -303,11 +317,11 @@ public class W1 extends javax.swing.JFrame {
 
         blockedList.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        blockedTextArea.setColumns(20);
-        blockedTextArea.setRows(5);
-        blockedList.setViewportView(blockedTextArea);
+        exitTextArea.setColumns(20);
+        exitTextArea.setRows(5);
+        blockedList.setViewportView(exitTextArea);
 
-        jPanel2.add(blockedList, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, 150, 170));
+        jPanel2.add(blockedList, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 360, 150, 90));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -315,15 +329,15 @@ public class W1 extends javax.swing.JFrame {
         jTextArea3.setRows(5);
         jScrollPane2.setViewportView(jTextArea3);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, 150, 390));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 50, 150, 400));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel5.setText("Ready");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("PCBs");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, -1, -1));
 
         showUsageButton.setText("Show Usage");
         showUsageButton.addActionListener(new java.awt.event.ActionListener() {
@@ -345,6 +359,18 @@ public class W1 extends javax.swing.JFrame {
         jLabel2.setText("Cycle:");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, -1, -1));
 
+        jLabel17.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel17.setText("Blocked");
+        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 180, -1, -1));
+
+        blockedList1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        blockedTextArea.setColumns(20);
+        blockedTextArea.setRows(5);
+        blockedList1.setViewportView(blockedTextArea);
+
+        jPanel2.add(blockedList1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, 150, 110));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 490));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 490));
@@ -360,6 +386,7 @@ public class W1 extends javax.swing.JFrame {
         // TODO add your handling code here:
         onPlay.release(cpusSlider.getValue());
         onPlayClock.release();
+        ProcessImageCSV.saveProcessesToCSV(readyList, "procesos.csv");
         this.createProcess1.setEnabled(false);
         this.cpusSlider.setEnabled(false);
         this.playButton.setEnabled(false);
@@ -453,6 +480,7 @@ public class W1 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane blockedList;
+    private javax.swing.JScrollPane blockedList1;
     private javax.swing.JTextArea blockedTextArea;
     private javax.swing.JTextArea cpu1TextArea;
     private javax.swing.JTextArea cpu2TextArea;
@@ -460,6 +488,7 @@ public class W1 extends javax.swing.JFrame {
     private javax.swing.JLabel cpuUnits;
     private javax.swing.JSlider cpusSlider;
     private javax.swing.JButton createProcess1;
+    private javax.swing.JTextArea exitTextArea;
     private javax.swing.JTextField insntrucionTextArea;
     private javax.swing.JLabel instructionTime2;
     private javax.swing.JLabel jLabel1;
@@ -469,6 +498,7 @@ public class W1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;

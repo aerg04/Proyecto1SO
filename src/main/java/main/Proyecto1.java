@@ -22,36 +22,39 @@ public class Proyecto1 {
 
     public static void main(String[] args) {
         
-        List<ProcessImage> processes = new List<>();
-
-        // Crear procesos de ejemplo y agregarlos a la lista
-        processes.appendLast(new ProcessImage(null, "CPU Bound", 1, "ready", "Process1", 1, 0, 50));
-        processes.appendLast(new ProcessImage(null, "I/O Bound", 2, "ready", "Process2", 1, 0, 30));
+//        List<ProcessImage> processes = new List<>();
+//
+//        // Crear procesos de ejemplo y agregarlos a la lista
+//        processes.appendLast(new ProcessImage(new List<Integer>(), "CPU Bound", 1, "ready", "Process1", 1, 0, 50));
+//        processes.appendLast(new ProcessImage(new List<Integer>(), "I/O Bound", 2, "ready", "Process2", 1, 0, 30));
 
         // Guardar en CSV
-        ProcessImageCSV.saveProcessesToCSV(processes, "procesos.csv");
+//        ProcessImageCSV.saveProcessesToCSV(processes, "procesos.csv");
         
         //aqui hay que cargar los procesos de las lista
         
         String filePath = "procesos.csv";
 
         // Leer procesos desde CSV
-        List<ProcessImage> loadedProcesses = ProcessImageCSV.readProcessesFromCSV(filePath);
-
+        List<ProcessImage> readyList = ProcessImageCSV.readProcessesFromCSV(filePath);
+        List<ProcessImage> allProcess = new List();
+        
+        
         // Mostrar los procesos cargados
-        NodoList<ProcessImage> current = loadedProcesses.getHead();
+        NodoList<ProcessImage> current = readyList.getHead();
         while (current != null) {
             ProcessImage p = current.getValue();
             System.out.println("ID: " + p.getId() + ", Nombre: " + p.getName() + ", Estado: " + p.getStatus());
+            allProcess.appendLast(p);
+
             current = current.getpNext();
         }
         
         //para sincronizar los cpu al iniciar la simulación
         Semaphore onPlay = new Semaphore(0);
         Semaphore onPlayClock = new Semaphore(0);
-        List readyList = new List();
         
-        W1 w1 = new W1(onPlay,onPlayClock,readyList);
+        W1 w1 = new W1(onPlay,onPlayClock,readyList,allProcess);
         w1.setVisible(true);
       
         Semaphore mutexDispatcher = new Semaphore(1);
@@ -59,7 +62,7 @@ public class Proyecto1 {
         //colas del disptcher
         List blockedList = new List();
         List exitList = new List();
-        Dispatcher dispatcher = new Dispatcher(readyList,blockedList,exitList,w1);
+        Dispatcher dispatcher = new Dispatcher(readyList,blockedList,exitList,allProcess,w1);
         
         // para los cpus
         Clock clock = new Clock(mutexDispatcher, onPlayClock, w1, dispatcher,timeHandler);

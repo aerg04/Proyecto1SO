@@ -60,9 +60,23 @@ public class CPU extends Thread {
             }else{
                 //checkear que el pocesso aun tiene tiempo de ejcución
                 //revisar si hay un proceos de mayor prioridad para ploitica expulsivas
-                if(this.quantum==0 || this.checkSRT() ){
-                    this.useDispatcher("ready");
-                    this.getProcess();
+                if(this.quantum==0 || this.checkSRT()){
+                    if (this.quantum==0) {
+                        this.useDispatcher("ready");
+                        this.getProcess();
+                        
+                    }else{
+                        this.window.updateCPUs("Dispatcher(OS)", id);
+                        for (int i = 0; i < 4; i++) {
+                        try {
+                            sleep(timeHandler.getInstructionTime());
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        window.updateDataset(1, "OS", id);
+                        }
+                        this.updateInterfaceProcess();
+                    }
                     
                 }else{
                     if(this.currentProcess.getDuration() < this.memoryAddressRegister){
@@ -114,7 +128,7 @@ public class CPU extends Thread {
     }
     
     private void interruptHandler(Exception exception){
-        
+        System.out.println("CPU: " + exception.getOriginCPU() + " Process: " + exception.getProcessId());
         try {
             //Aqui va un semaforo
                 mutexCPUs.acquire();
@@ -148,6 +162,14 @@ public class CPU extends Thread {
                 Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
             }
             boolean output = this.dispatcher.ifSRT(currentProcess);
+            if(output){
+                if(quantum != currentProcess.getQuantum()){
+                    this.dispatcher.updatePCB(currentProcess, programCounter, memoryAddressRegister,"ready");
+                }else{
+                    this.dispatcher.updatePCB(currentProcess,"ready");
+                }
+                this.currentProcess = this.dispatcher.getProcess();
+            }
             mutexCPUs.release();
             return output;
     }

@@ -17,12 +17,14 @@ public class Dispatcher {
     private List readyList;
     private List blockedList;
     private List exitList;
+    private List allProcessList;
     private W1 window;
 
-    public Dispatcher(List readyList, List blockedList, List exitList, W1 window) {
+    public Dispatcher(List readyList, List blockedList, List exitList,List allProcess, W1 window) {
         this.readyList = readyList;
         this.blockedList = blockedList;
         this.exitList = exitList;
+        this.allProcessList = allProcess;
         this.window = window;
     }
     
@@ -59,8 +61,6 @@ public class Dispatcher {
         this.updateProcessList();
         if(output == null){
             System.out.println("process null") ;
-            System.out.println(readyList.isEmpty()+"");
-            System.out.println(readyList.getHead()+"");
         }
         return output;    
     }
@@ -153,7 +153,7 @@ public class Dispatcher {
     }
     
     public boolean ifSRT(ProcessImage process){
-        if(window.getSelectAlgorithm() == 4){
+        if(window.getSelectAlgorithm() == 3){
         NodoList current = this.readyList.getHead();
         while (current != null) {
             if (((ProcessImage) current.getValue()).getDuration() - ((ProcessImage) current.getValue()).getMemoryAddressRegister() < 
@@ -180,6 +180,7 @@ public class Dispatcher {
         }
         this.updateReadyList();
         this.updateBlockedList();
+        this.updateexitList();
         this.updateProcessList();
     }
     public void updatePCB(ProcessImage process,String state){
@@ -194,6 +195,7 @@ public class Dispatcher {
         }
         this.updateReadyList();
         this.updateBlockedList();
+        this.updateexitList();
         this.updateProcessList();
     }
     
@@ -216,24 +218,13 @@ public class Dispatcher {
             pAux = pAux.getpNext();
         }
         this.updateBlockedList();
+        this.updateReadyList();
         this.updateProcessList();
     }
     
     public void updateProcessList(){
-        NodoList pAux = readyList.getHead();
+        NodoList pAux = allProcessList.getHead();
         String display = "";
-        while(pAux!=null){
-            ProcessImage process=(ProcessImage) pAux.getValue();
-            display += this.makeString(process);
-            pAux = pAux.getpNext();
-        }
-        pAux = blockedList.getHead();
-        while(pAux!=null){
-            ProcessImage process=(ProcessImage) pAux.getValue();
-            display += this.makeString(process);
-            pAux = pAux.getpNext();
-        }
-        pAux = exitList.getHead();
         while(pAux!=null){
             ProcessImage process=(ProcessImage) pAux.getValue();
             display += this.makeString(process);
@@ -268,6 +259,21 @@ public class Dispatcher {
             pAux = pAux.getpNext();
         }
         window.updateBlock(display);
+    }
+    
+    public void updateexitList(){
+        NodoList pAux = exitList.getHead();
+        String display = "";
+        System.out.println(pAux);
+        while(pAux!=null){
+            ProcessImage process=(ProcessImage) pAux.getValue();
+            
+            display += "\n ----------------------------------\n "
+                    + "ID: " + process.getId() +
+                      "\n Nombre: " + process.getName();
+            pAux = pAux.getpNext();
+        }
+        window.updateExit(display);
     }
     
     private String makeString(ProcessImage currentProcess){

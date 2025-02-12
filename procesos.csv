@@ -1,3 +1,5 @@
-ID,Name,Type,Status,ProgramCounter,MemoryAddressRegister,Duration,Quantum
-1,Process1,CPU Bound,ready,1,0,50,0
-2,Process2,I/O Bound,ready,1,0,30,0
+ID,Name,Type,Status,ProgramCounter,MemoryAddressRegister,Duration,Quantum,WaitingTime,Instructions
+0,Process1,CPU Bound,ready,1,0,50,0,0,[]
+1,Process2,I/O Bound,ready,1,0,30,0,0,[]
+2,2,CPU Bound,ready,1,0,200,0,0,[]
+3,Hola,CPU Bound,ready,1,0,8,0,0,2;2;3;4
