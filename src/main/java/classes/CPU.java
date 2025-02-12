@@ -156,7 +156,7 @@ public class CPU extends Thread {
         currentProcess = null;
         while(currentProcess==null){
             this.window.updateCPUs("Dispatcher(OS)", id);
-            for (int i = 1; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
             try {
                 sleep(timeHandler.getInstructionTime());
             } catch (InterruptedException ex) {

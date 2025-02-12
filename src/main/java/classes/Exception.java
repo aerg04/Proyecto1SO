@@ -88,7 +88,7 @@ public class Exception extends Thread {
     @Override
     public void run(){
  
-        for(int i = 1; i <= this.exceptionCycle;i++){
+        for(int i = 0; i <= this.exceptionCycle;i++){
             try {
                 sleep(timeHandler.getInstructionTime());
             } catch (InterruptedException ex) {

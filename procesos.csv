@@ -1,3 +1,3 @@
 ID,Name,Type,Status,ProgramCounter,MemoryAddressRegister,Duration,Quantum
-1,Process1,System,Running,100,200,50,0
-2,Process2,User,Waiting,150,250,30,0
+1,Process1,CPU Bound,ready,1,0,50,0
+2,Process2,I/O Bound,ready,1,0,30,0
