@@ -25,8 +25,8 @@ public class Proyecto1 {
         List<ProcessImage> processes = new List<>();
 
         // Crear procesos de ejemplo y agregarlos a la lista
-        processes.appendLast(new ProcessImage(null, "System", 1, "Running", "Process1", 100, 200, 50));
-        processes.appendLast(new ProcessImage(null, "User", 2, "Waiting", "Process2", 150, 250, 30));
+        processes.appendLast(new ProcessImage(null, "CPU Bound", 1, "ready", "Process1", 1, 0, 50));
+        processes.appendLast(new ProcessImage(null, "I/O Bound", 2, "ready", "Process2", 1, 0, 30));
 
         // Guardar en CSV
         ProcessImageCSV.saveProcessesToCSV(processes, "procesos.csv");
