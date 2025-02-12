@@ -10,6 +10,7 @@ package classes;
  * @author DELL
  */
 
+import java.util.Comparator;
 import primitivas.*;
 import main.*;
 
@@ -29,8 +30,12 @@ public class Dispatcher {
     public ProcessImage getProcess(){
         ProcessImage output = null;
         if(this.readyList.isEmpty()){
-        window.getSelectAlgorithm();
-        switch(window.getSelectAlgorithm()){
+        int selectedAlgorithm = window.getSelectAlgorithm();
+        
+        // Ordenar la lista antes de seleccionar un proceso
+        sortReadyQueue(selectedAlgorithm);
+            
+        switch(selectedAlgorithm){
             case 0 -> {
                 //FCFS
                 output = this.FCFS();
@@ -64,6 +69,26 @@ public class Dispatcher {
         }
         return output;    
     }
+    
+    /** Ordenar la cola de procesos antes de la selección **/
+    private void sortReadyQueue(int schedulingAlgorithm) {
+        switch (schedulingAlgorithm) {
+            case 0: // FCFS (No requiere ordenamiento)
+                break;
+            case 1: // Round Robin (Mantiene el orden)
+                break;
+            case 2: // SPN - Ordenar por menor duración
+                readyList = sortByDuration(readyList);
+                break;
+            case 3: // SRT - Ordenar por menor tiempo restante
+                readyList = sortByRemainingTime(readyList);
+                break;
+            case 4: // HRR - Ordenar por mayor Response Ratio
+                readyList = sortByHRR(readyList);
+                break;
+        }
+    }
+    
     private ProcessImage FCFS(){
         NodoList pAux = this.readyList.getHead();
         this.readyList.delete(pAux);
@@ -164,6 +189,47 @@ public class Dispatcher {
         }    
         }
         return false;
+    }
+    
+    /** Métodos de Ordenamiento **/
+    private List sortByDuration(List list) {
+        return bubbleSort(list, (p1, p2) -> Integer.compare(((ProcessImage) p1).getDuration(), ((ProcessImage) p2).getDuration()));
+    }
+
+    private List sortByRemainingTime(List list) {
+        return bubbleSort(list, (p1, p2) -> Integer.compare(
+                ((ProcessImage) p1).getDuration() - ((ProcessImage) p1).getProgramCounter(),
+                ((ProcessImage) p2).getDuration() - ((ProcessImage) p2).getProgramCounter()
+        ));
+    }
+
+    private List sortByHRR(List list) {
+        return bubbleSort(list, (p1, p2) -> Double.compare(getHRR((ProcessImage) p2), getHRR((ProcessImage) p1)));
+    }
+
+    private double getHRR(ProcessImage p) {
+        return (p.getWaitingTime() + p.getDuration()) / (double) p.getDuration();
+    }
+
+    private List bubbleSort(List list, Comparator comparator) {
+        if (list.getSize() <= 1) return list;
+
+        boolean swapped;
+        do {
+            swapped = false;
+            NodoList current = list.getHead();
+            while (current != null && current.getpNext() != null) {
+                if (comparator.compare(current.getValue(), current.getpNext().getValue()) > 0) {
+                    Object temp = current.getValue();
+                    current.setValue(current.getpNext().getValue());
+                    current.getpNext().setValue(temp);
+                    swapped = true;
+                }
+                current = current.getpNext();
+            }
+        } while (swapped);
+
+        return list;
     }
 
     public void updatePCB(ProcessImage process,int programCounter,int memoryAddressRegister,String state){ 
