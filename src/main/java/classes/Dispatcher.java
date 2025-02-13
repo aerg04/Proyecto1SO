@@ -127,13 +127,7 @@ public class Dispatcher {
     private ProcessImage SPN(){
         // Implement SPN algorithm
         NodoList shortestJob = this.readyList.getHead();
-        NodoList current = this.readyList.getHead();
-        while (current != null) {
-            if (((ProcessImage) current.getValue()).getDuration() < ((ProcessImage) shortestJob.getValue()).getDuration()) {
-                shortestJob = current;
-            }
-            current = current.getpNext();
-        }
+        
         this.readyList.delete(shortestJob);
         ProcessImage output = (ProcessImage) shortestJob.getValue();
         output.setStatus("running");
@@ -145,14 +139,7 @@ public class Dispatcher {
         // Implement SPN algorithm
         //es expulsiva
         NodoList shortestJob = this.readyList.getHead();
-        NodoList current = this.readyList.getHead();
-        while (current != null) {
-            if (((ProcessImage) current.getValue()).getDuration() - ((ProcessImage) current.getValue()).getMemoryAddressRegister() < 
-                    ((ProcessImage) shortestJob.getValue()).getDuration()- ((ProcessImage) shortestJob.getValue()).getMemoryAddressRegister() ) {
-                shortestJob = current;
-            }
-            current = current.getpNext();
-        }
+        
         this.readyList.delete(shortestJob);
         ProcessImage output = (ProcessImage) shortestJob.getValue();
         output.setStatus("running");
@@ -164,17 +151,7 @@ public class Dispatcher {
     private ProcessImage HRR(){
         // Implement HRR algorithm
         NodoList bestJob = this.readyList.getHead();
-        NodoList current = this.readyList.getHead();
-        double highestRatio = 0;
-        while (current != null) {
-            ProcessImage proc = (ProcessImage) current.getValue();
-            double responseRatio = (proc.getWaitingTime() + proc.getDuration()) / (double) proc.getDuration();
-            if (responseRatio > highestRatio) {
-                highestRatio = responseRatio;
-                bestJob = current;
-            }
-            current = current.getpNext();
-        }
+        
         this.readyList.delete(bestJob);
         ProcessImage output = (ProcessImage) bestJob.getValue();
         output.setStatus("running");
@@ -184,11 +161,6 @@ public class Dispatcher {
     }
     
     public boolean ifSRT(ProcessImage process){
-        if(selectedAlgorithm != window.getSelectAlgorithm()){
-            selectedAlgorithm = window.getSelectAlgorithm();
-            sortReadyQueue(selectedAlgorithm);
-            
-        }
         if(window.getSelectAlgorithm() == 3){
         NodoList current = this.readyList.getHead();
         while (current != null) {
@@ -277,10 +249,16 @@ public class Dispatcher {
     }
     
     public void updateWaitingTime(){
+        if(selectedAlgorithm != window.getSelectAlgorithm()){
+            selectedAlgorithm = window.getSelectAlgorithm();
+            sortReadyQueue(selectedAlgorithm);
+            this.updateReadyList();
+        }
         NodoList pAux = this.readyList.getHead();
         while(pAux!=null){
-            int waitingTime = ((ProcessImage) pAux.getValue()).getWaitingTime();
-            ((ProcessImage) pAux.getValue()).setWaitingTime(waitingTime++);
+            ProcessImage process = (ProcessImage)pAux.getValue();
+            int time = process.getWaitingTime();
+            process.setWaitingTime(time+1);
             pAux = pAux.getpNext();
         }
     }
@@ -290,6 +268,7 @@ public class Dispatcher {
         while(pAux!=null){
             if(id== ((ProcessImage)pAux.getValue()).getId()){
                 ((ProcessImage)pAux.getValue()).setStatus("ready");
+                ((ProcessImage)pAux.getValue()).setWaitingTime(0);
                 blockedList.delete(pAux);
                 readyList.appendLast(pAux);
                 break;                

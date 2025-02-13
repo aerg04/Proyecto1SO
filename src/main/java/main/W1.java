@@ -84,7 +84,7 @@ public class W1 extends javax.swing.JFrame {
         allProcessList.appendLast(newProcess);
         updatePCBs();
     }
-    private void updatePCBs(){
+    public void updatePCBs(){
         NodoList pAux = readyList.getHead();
         String display = "";
         while(pAux!=null){

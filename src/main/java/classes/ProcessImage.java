@@ -33,6 +33,7 @@ public class ProcessImage {
         this.programCounter = programCounter;
         this.memoryAddressRegister = memoryAddressRegister;
         this.duration = duration;
+        this.waitingTime = 0;
     }
     
     public String getType() {
