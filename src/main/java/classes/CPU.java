@@ -62,9 +62,11 @@ public class CPU extends Thread {
                 //revisar si hay un proceos de mayor prioridad para ploitica expulsivas
                 if(this.quantum==0 || this.checkSRT() || this.checkRR() ){
                     //quantum 0
-                    if (this.quantum==0 || (this.checkRR() && quantum<=-6)) {
+                    if (this.quantum==0 || this.checkRR() ) {
                         this.useDispatcher("ready");
                         this.getProcess();
+
+                        
                     }else{
                         this.window.updateCPUs("Dispatcher(OS)", id);
                         for (int i = 0; i < 4; i++) {
@@ -225,7 +227,10 @@ public class CPU extends Thread {
         this.window.updateCPUs(display, id);
     }
     private boolean checkRR(){
-        if(this.dispatcher.getSelectedAlgorithm() == 1) return true;
+        if(this.dispatcher.getSelectedAlgorithm() == 1 && quantum<=-6){
+            
+            return true;
+        }
         return false;
     }
 }

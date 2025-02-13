@@ -20,6 +20,8 @@ public class CreateProcess extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         father = w1;
+        instructions = new List();
+        //this.jTextArea1.setEnabled(false);
         
     }
     public CreateProcess(){
@@ -104,7 +106,11 @@ public class CreateProcess extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "I/O Bound", "CPU Bound" }));
-        typeComboBox.setSelectedIndex(1);
+        typeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeComboBoxActionPerformed(evt);
+            }
+        });
         jPanel1.add(typeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 390, -1));
 
         durationTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -173,7 +179,7 @@ public class CreateProcess extends javax.swing.JFrame {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
-        if (this.validateTextAreaInput(this.jTextArea1.getText())){
+        if (this.validateTextAreaInput(this.jTextArea1.getText()) && typeComboBox.getSelectedIndex() == 1){
             if (!nameTextField.getText().trim().isEmpty()) {
                     try{
                         father.createNewProcess(instructions, nameTextField.getText(), (String) typeComboBox.getSelectedItem(), Integer.parseInt(durationTextField.getText().trim()));
@@ -206,6 +212,16 @@ public class CreateProcess extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Duration must be a number", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_durationTextFieldActionPerformed
+
+    private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
+        // TODO add your handling code here:
+        if(typeComboBox.getSelectedIndex() == 1){
+            this.jTextArea1.setEnabled(false);
+            this.jTextArea1.setText("");
+        }else{
+            this.jTextArea1.setEnabled(true);
+        }
+    }//GEN-LAST:event_typeComboBoxActionPerformed
 
     /**
      * @param args the command line arguments

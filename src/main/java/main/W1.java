@@ -50,7 +50,8 @@ public class W1 extends javax.swing.JFrame {
             selectDispatcher1.setSelectedIndex(selectedAlgorithm);
             timeSlider2.setValue(numberOfInstructions);
             cpusSlider.setValue(numberOfCPUs);
-
+            this.cpuUnits.setText(this.cpusSlider.getValue()+ " units");
+            this.instructionTime2.setText(this.timeSlider2.getValue()+ " ms");
             System.out.println("Configuración cargada desde CSV.");
         }
     } catch (IOException e) {
@@ -233,7 +234,8 @@ public class W1 extends javax.swing.JFrame {
         });
         jPanel2.add(createProcess1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 400, 140, -1));
 
-        timeSlider2.setMaximum(10000);
+        timeSlider2.setMaximum(5000);
+        timeSlider2.setMinimum(1);
         timeSlider2.setValue(5000);
         timeSlider2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -243,7 +245,7 @@ public class W1 extends javax.swing.JFrame {
         jPanel2.add(timeSlider2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 80, -1, -1));
 
         instructionTime2.setText("5000 ms");
-        jPanel2.add(instructionTime2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 50, -1));
+        jPanel2.add(instructionTime2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 90, -1));
 
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {

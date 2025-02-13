@@ -100,7 +100,7 @@ public class Dispatcher {
         }
     }
     private List sortByWaitingTime(List list) {
-        return bubbleSort(list, (p1, p2) -> Integer.compare(((ProcessImage) p1).getWaitingTime(), ((ProcessImage) p2).getWaitingTime()));
+        return bubbleSort(list, (p1, p2) -> Integer.compare(((ProcessImage) p2).getWaitingTime(), ((ProcessImage) p1).getWaitingTime()));
     }
 
     private ProcessImage FCFS(){
@@ -316,7 +316,7 @@ public class Dispatcher {
     public void updateBlockedList(){
         NodoList pAux = blockedList.getHead();
         String display = "";
-        System.out.println(pAux);
+        //System.out.println(pAux);
         while(pAux!=null){
             ProcessImage process=(ProcessImage) pAux.getValue();
             
@@ -331,7 +331,7 @@ public class Dispatcher {
     public void updateexitList(){
         NodoList pAux = exitList.getHead();
         String display = "";
-        System.out.println(pAux);
+        //System.out.println(pAux);
         while(pAux!=null){
             ProcessImage process=(ProcessImage) pAux.getValue();
             
