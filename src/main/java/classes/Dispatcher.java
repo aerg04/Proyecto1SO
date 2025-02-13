@@ -29,6 +29,14 @@ public class Dispatcher {
         this.allProcessList = allProcess;
         this.window = window;
     }
+
+    public int getSelectedAlgorithm() {
+        return selectedAlgorithm;
+    }
+
+    public void setSelectedAlgorithm(int selectedAlgorithm) {
+        this.selectedAlgorithm = selectedAlgorithm;
+    }
     
     public ProcessImage getProcess(){
         ProcessImage output = null;
