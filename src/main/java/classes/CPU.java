@@ -62,7 +62,7 @@ public class CPU extends Thread {
                 //revisar si hay un proceos de mayor prioridad para ploitica expulsivas
                 if(this.quantum==0 || this.checkSRT() || this.checkRR() ){
                     //quantum 0
-                    if (this.quantum==0 || (this.checkRR() && quantum<=-6 && quantum<=5)) {
+                    if (this.quantum==0 || (this.checkRR() && quantum<=-6)) {
                         this.useDispatcher("ready");
                         this.getProcess();
                     }else{
