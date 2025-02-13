@@ -42,13 +42,13 @@ public class Clock extends Thread {
         }
         while(true){
             try {
-                mutex.acquire();
-                this.dispatcher.updateWaitingTime();
-                mutex.release();
                 sleep(timeHandler.getInstructionTime());
+                mutex.acquire();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Exception.class.getName()).log(Level.SEVERE, null, ex);
             }
+            this.dispatcher.updateWaitingTime();
+            mutex.release();
             cycle++;
             window.updateCycle(cycle);
         }

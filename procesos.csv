@@ -1,4 +1,8 @@
 ID,Name,Type,Status,ProgramCounter,MemoryAddressRegister,Duration,Quantum,WaitingTime,Instructions
-1,Process1,System,Running,100,200,50,0,0,10;20;30
-2,Process2,User,Waiting,150,250,30,0,0,5;15;25;35
-3,Process3,Kernel,Blocked,200,300,40,0,0,1;2;3;4;5
+0,Process1,System,ready,1,0,200,0,0,10;20;30
+1,Process2,User,ready,1,0,200,0,0,5;15;25;35
+2,Process3,Kernel,ready,1,0,200,0,0,1;2;3;4;5
+3,Andrés,CPU Bound,ready,1,0,200,0,0,1;2;3;4;5;6
+4,Jesus,CPU Bound,ready,1,0,40,0,0,1;2;3;4
+5,Pedro,CPU Bound,ready,1,0,30,0,0,1;2
+6,Amparito,CPU Bound,ready,1,0,200,0,0,1;4

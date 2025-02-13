@@ -97,6 +97,7 @@ public class CPU extends Thread {
                         }
                         this.updateInterfaceProcess();
                         window.updateDataset(1, "User", id);
+                        quantum--;
                         //checkear si hay que crear interrupción
                         if(this.isInterruption(memoryAddressRegister)){
                             this.useDispatcher("blocked");
@@ -105,7 +106,6 @@ public class CPU extends Thread {
                         }else{
                             // instrucciones inertes
                             //esto es si el proceso continua su ejecución
-                            quantum--;
                             programCounter++;
                             this.memoryAddressRegister++;
                             this.updateInterfaceProcess();
