@@ -38,13 +38,29 @@ public class Dispatcher {
         // Ordenar la lista antes de seleccionar un proceso
         sortReadyQueue(selectedAlgorithm);
             
-            NodoList pAux = this.readyList.getHead();
-            this.readyList.delete(pAux);
-            output = (ProcessImage) pAux.getValue();
-            output.setStatus("running");
-            //asi nunca se saldra hasta que haya interrupción
-            output.setQuantum(-1);
-        //output.setWaitingTime(0);
+        switch(selectedAlgorithm){
+            case 0 -> {
+                //FCFS
+                output = this.FCFS();
+                }
+            case 1 -> {
+                //round robin
+                 output = this.RoundRobin();
+                }
+            case 2 -> {
+                output = this.SPN();
+                // SPN
+                }
+            case 3 -> {
+                 output = this.SRT();
+                //SRT
+                }
+            case 4 -> {
+                //HRR
+                 output = this.HRR();
+                }
+            
+        }
         }
          //aqui hay que actulizar la interfaz
         this.updateReadyList();
