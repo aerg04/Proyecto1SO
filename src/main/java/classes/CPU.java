@@ -60,7 +60,7 @@ public class CPU extends Thread {
             }else{
                 //checkear que el pocesso aun tiene tiempo de ejcución
                 //revisar si hay un proceos de mayor prioridad para ploitica expulsivas
-                if(this.quantum==0 || this.checkSRT() || this.checkRR() ){
+                if((this.quantum==0 || this.checkSRT() || this.checkRR())&& dispatcher.getReadyList().isEmpty() ){
                     //quantum 0
                     if (this.quantum==0 || this.checkRR() ) {
                         this.useDispatcher("ready");
@@ -130,6 +130,7 @@ public class CPU extends Thread {
     }
     
     private void interruptHandler(Exception exception){
+        System.out.println("Exception Resolved");
         System.out.println("CPU: " + exception.getOriginCPU() + " Process: " + exception.getProcessId());
         try {
             //Aqui va un semaforo

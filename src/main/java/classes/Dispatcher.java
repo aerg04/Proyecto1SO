@@ -34,6 +34,10 @@ public class Dispatcher {
         return selectedAlgorithm;
     }
 
+    public List getReadyList() {
+        return readyList;
+    }
+
     public void setSelectedAlgorithm(int selectedAlgorithm) {
         this.selectedAlgorithm = selectedAlgorithm;
     }
@@ -269,6 +273,7 @@ public class Dispatcher {
             process.setWaitingTime(time+1);
             pAux = pAux.getpNext();
         }
+        this.updateProcessList();
     }
     
     public void updateBlockToReady(int id){
