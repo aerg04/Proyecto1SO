@@ -20,6 +20,7 @@ public class Dispatcher {
     private List exitList;
     private List allProcessList;
     private W1 window;
+    public int selectedAlgorithm;
 
     public Dispatcher(List readyList, List blockedList, List exitList,List allProcess, W1 window) {
         this.readyList = readyList;
@@ -32,34 +33,18 @@ public class Dispatcher {
     public ProcessImage getProcess(){
         ProcessImage output = null;
         if(this.readyList.isEmpty()){
-        int selectedAlgorithm = window.getSelectAlgorithm();
+        selectedAlgorithm = window.getSelectAlgorithm();
         
         // Ordenar la lista antes de seleccionar un proceso
         sortReadyQueue(selectedAlgorithm);
             
-        switch(selectedAlgorithm){
-            case 0 -> {
-                //FCFS
-                output = this.FCFS();
-                }
-            case 1 -> {
-                //round robin
-                 output = this.RoundRobin();
-                }
-            case 2 -> {
-                output = this.SPN();
-                // SPN
-                }
-            case 3 -> {
-                 output = this.SRT();
-                //SRT
-                }
-            case 4 -> {
-                //HRR
-                 output = this.HRR();
-                }
-            
-        }
+            NodoList pAux = this.readyList.getHead();
+            this.readyList.delete(pAux);
+            output = (ProcessImage) pAux.getValue();
+            output.setStatus("running");
+            //asi nunca se saldra hasta que haya interrupción
+            output.setQuantum(-1);
+        //output.setWaitingTime(0);
         }
          //aqui hay que actulizar la interfaz
         this.updateReadyList();
@@ -73,9 +58,11 @@ public class Dispatcher {
     /** Ordenar la cola de procesos antes de la selección **/
     private void sortReadyQueue(int schedulingAlgorithm) {
         switch (schedulingAlgorithm) {
-            case 0: // FCFS (No requiere ordenamiento)
+            case 0: // FCFS (No requiere ordenamiento
+                readyList=sortByWaitingTime(readyList);
                 break;
             case 1: // Round Robin (Mantiene el orden)
+                readyList=sortByWaitingTime(readyList);
                 break;
             case 2: // SPN - Ordenar por menor duración
                 readyList = sortByDuration(readyList);
@@ -88,7 +75,10 @@ public class Dispatcher {
                 break;
         }
     }
-    
+    private List sortByWaitingTime(List list) {
+        return bubbleSort(list, (p1, p2) -> Integer.compare(((ProcessImage) p1).getWaitingTime(), ((ProcessImage) p2).getWaitingTime()));
+    }
+
     private ProcessImage FCFS(){
         NodoList pAux = this.readyList.getHead();
         this.readyList.delete(pAux);
@@ -178,6 +168,11 @@ public class Dispatcher {
     }
     
     public boolean ifSRT(ProcessImage process){
+        if(selectedAlgorithm != window.getSelectAlgorithm()){
+            selectedAlgorithm = window.getSelectAlgorithm();
+            sortReadyQueue(selectedAlgorithm);
+            
+        }
         if(window.getSelectAlgorithm() == 3){
         NodoList current = this.readyList.getHead();
         while (current != null) {
@@ -347,7 +342,10 @@ public class Dispatcher {
                 "\n Status: " + currentProcess.getStatus()+ 
                 "\n Nombre: " + currentProcess.getName() +
                 "\n PC: " + currentProcess.getProgramCounter() + 
-                "\n MAR: " + currentProcess.getMemoryAddressRegister() ;
+                "\n MAR: " + currentProcess.getMemoryAddressRegister() +
+                "\n RT: " + (currentProcess.getDuration()-currentProcess.getMemoryAddressRegister()) +
+                "\n Instructions: " + currentProcess.getInstructions().showAttribute()
+                ;
         return display;
     }
 }
