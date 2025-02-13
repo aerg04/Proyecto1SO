@@ -289,11 +289,14 @@ public class Dispatcher {
         NodoList pAux = this.blockedList.getHead();
         while(pAux!=null){
             if(id== ((ProcessImage)pAux.getValue()).getId()){
+                ((ProcessImage)pAux.getValue()).setStatus("ready");
                 blockedList.delete(pAux);
-                readyList.appendLast(pAux);                
+                readyList.appendLast(pAux);
+                break;                
             }
             pAux = pAux.getpNext();
         }
+        
         this.updateBlockedList();
         this.updateReadyList();
         this.updateProcessList();
@@ -353,13 +356,14 @@ public class Dispatcher {
         window.updateExit(display);
     }
     
-    private String makeString(ProcessImage currentProcess){
+    public static String makeString(ProcessImage currentProcess){
         String display = "\n ----------------------------------\n ID: " + currentProcess.getId() + 
                 "\n Status: " + currentProcess.getStatus()+ 
                 "\n Nombre: " + currentProcess.getName() +
                 "\n PC: " + currentProcess.getProgramCounter() + 
                 "\n MAR: " + currentProcess.getMemoryAddressRegister() +
                 "\n RT: " + (currentProcess.getDuration()-currentProcess.getMemoryAddressRegister()) +
+                "\n WT: " + currentProcess.getWaitingTime() +
                 "\n Instructions: " + currentProcess.getInstructions().showAttribute()
                 ;
         return display;
