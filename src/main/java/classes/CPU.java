@@ -77,6 +77,8 @@ public class CPU extends Thread {
                         }
                         window.updateDataset(1, "OS", id);
                         }
+                        
+
                         this.updateInterfaceProcess();
                     }
                     
@@ -151,6 +153,7 @@ public class CPU extends Thread {
         }
         //es posible que salva sin ser ejecutado
         if(quantum != currentProcess.getQuantum()){
+            //System.out.println(quantum + currentProcess.getQuantum());
             this.dispatcher.updatePCB(currentProcess, programCounter, memoryAddressRegister,state);
         }else{
             this.dispatcher.updatePCB(currentProcess,state);
@@ -172,6 +175,9 @@ public class CPU extends Thread {
                     this.dispatcher.updatePCB(currentProcess,"ready");
                 }
                 this.currentProcess = this.dispatcher.getProcess();
+                quantum = currentProcess.getQuantum();
+                programCounter = currentProcess.getProgramCounter()+1;
+                memoryAddressRegister = currentProcess.getProgramCounter();
             }
             mutexCPUs.release();
             return output;

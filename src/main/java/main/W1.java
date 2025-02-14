@@ -212,6 +212,7 @@ public class W1 extends javax.swing.JFrame {
 
         readyList1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+        readyTextArea.setEditable(false);
         readyTextArea.setColumns(20);
         readyTextArea.setRows(5);
         readyList1.setViewportView(readyTextArea);
@@ -315,6 +316,7 @@ public class W1 extends javax.swing.JFrame {
 
         blockedList.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+        exitTextArea.setEditable(false);
         exitTextArea.setColumns(20);
         exitTextArea.setRows(5);
         blockedList.setViewportView(exitTextArea);
@@ -323,6 +325,7 @@ public class W1 extends javax.swing.JFrame {
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+        jTextArea3.setEditable(false);
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
         jScrollPane2.setViewportView(jTextArea3);
@@ -363,6 +366,7 @@ public class W1 extends javax.swing.JFrame {
 
         blockedList1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+        blockedTextArea.setEditable(false);
         blockedTextArea.setColumns(20);
         blockedTextArea.setRows(5);
         blockedList1.setViewportView(blockedTextArea);
